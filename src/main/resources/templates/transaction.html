@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div>
+    <form action="/transaction" method="post" th:object="${transaction}">
+        <b>Enter the details:</b> <br>
+        <br>Send to whom<br>
+        <input type="text"
+               th:field="*{toUsername}"
+               name="Send to"
+               required/>
+        <br>Amount<br>
+        <input type="number" step="any"
+               th:field="*{amount}"
+               name="amount"/>
+        <br>Account type<br>
+        <input type="text"
+               th:field="*{accountType}"
+               name="account type"
+               value="saving"/>
+        <br>
+        <input type="submit"/>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Accounts</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body>
+<p>
+    <b>List of Accounts:</b>
+</p>
+
+<div th:if="${ not#lists.isEmpty(accounts)}">
+    <table>
+        <tr>
+            <th>Account type</th>
+            <th>Account balance</th>
+            <th>Username</th>
+        </tr>
+        <tr th:each="account : ${accounts}">
+            <td th:text="${account.type}"></td>
+            <td th:text="${account.balance}"></td>
+            <td th:text="${account.user.username}"></td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

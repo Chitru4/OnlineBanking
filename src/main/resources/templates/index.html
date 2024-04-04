@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<h1>Welcome to Online banking</h1>
+<div sec:authorize="isAnonymous()">
+  <h3><a th:href="@{/register}">Register</a></h3>
+  <h3><a th:href="@{/login}">Login</a></h3>
+</div>
+<div sec:authorize="isFullyAuthenticated()">
+  <h3>Welcome <span sec:authentication="name"></span></h3>
+  <h3><a th:href="@{/create-account}">Create Account</a></h3>
+  <h3><a th:href="@{/accounts}">View Accounts</a></h3>
+  <h3><a th:href="@{/transaction}">Send/ Receive Money</a></h3>
+  <h3><a th:href="@{/logout}">Logout</a></h3>
+</div>
+</body>
+</html>

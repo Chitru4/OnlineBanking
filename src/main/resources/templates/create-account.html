@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div>
+    <form action="/create-account" method="post" th:object="${account}">
+        <b>Create new account:</b> <br>
+        <br>Account type<br>
+        <input type="text"
+               th:field="*{type}"
+               name="type"
+               required/>
+        <br>Amount<br>
+        <input type="number" step="any"
+               th:field="*{balance}"
+               name="amount"/>
+        <br>
+        <input type="submit"/>
+    </form>
+</div>
+</body>
+</html>
