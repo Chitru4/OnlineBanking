@@ -1,6 +1,9 @@
 package com.airtel.onlinebanking.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "account", uniqueConstraints = {@UniqueConstraint(columnNames = {"account_id"})})
@@ -15,12 +18,14 @@ public class Account {
             strategy = GenerationType.SEQUENCE,
             generator = "account_sequence"
     )
-    @Column(name = "account_id")
     private Long accountId;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
     private User user;
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Transaction> transactions;
     private String type;
     private long balance;
 

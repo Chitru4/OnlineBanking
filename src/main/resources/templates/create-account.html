@@ -8,17 +8,25 @@
     <form action="/create-account" method="post" th:object="${account}">
         <b>Create new account:</b> <br>
         <br>Account type<br>
-        <input type="text"
-               th:field="*{type}"
-               name="type"
-               required/>
+        <label>
+            <input type="text"
+                   th:field="*{type}"
+                   name="type"
+                   required/>
+        </label>
         <br>Amount<br>
-        <input type="number" step="any"
-               th:field="*{balance}"
-               name="amount"/>
+        <label>
+            <input type="number" step="any"
+                   th:field="*{balance}"
+                   name="amount"/>
+        </label>
         <br>
         <input type="submit"/>
+        <br>
+        <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
+        <div class="alert alert-success" role="alert" th:text="${success}" th:if="${success}"></div>
     </form>
 </div>
+<h4><a th:href="@{/}">Click here to go back</a></h4>
 </body>
 </html>

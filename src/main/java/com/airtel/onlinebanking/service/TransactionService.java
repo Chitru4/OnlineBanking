@@ -47,6 +47,7 @@ public class TransactionService {
         else {
             return -1;
         }
+        transaction.setAccount(accountFrom);
         transactionRepository.save(transaction);
         return 1;
     }

@@ -1,10 +1,12 @@
 package com.airtel.onlinebanking.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "transaction", uniqueConstraints = {@UniqueConstraint(columnNames = {"transaction_id"})})
 public class Transaction {
     @Id
     @SequenceGenerator(
@@ -22,8 +24,9 @@ public class Transaction {
     private Long amount;
     private String fromUsername;
     private String toUsername;
-    @Transient
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_account_id")
     private Account account;
     public Transaction() {
     }
@@ -82,5 +85,13 @@ public class Transaction {
 
     public void setToUsername(String toUsername) {
         this.toUsername = toUsername;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 }

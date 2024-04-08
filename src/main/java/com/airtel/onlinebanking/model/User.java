@@ -4,12 +4,12 @@ import jakarta.persistence.*;
 import org.springframework.lang.NonNull;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
-@Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})})
+@Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = {"id"})})
 public class User {
     @Id
-    @NonNull
     @SequenceGenerator(
             name = "user_sequence",
             sequenceName = "user_sequence",
@@ -32,11 +32,12 @@ public class User {
     private String panNumber;
     private String email;
     private LocalDate dob;
-
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Account> accounts;
     public User() {
     }
 
-    public User(String username, String password, String firstName, String lastName, Long mobile, String address, String panNumber, String email, LocalDate dob) {
+    public User(String username, @NonNull String password, String firstName, String lastName, Long mobile, String address, @NonNull String panNumber, String email, LocalDate dob) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
@@ -126,5 +127,13 @@ public class User {
 
     public void setDob(LocalDate dob) {
         this.dob = dob;
+    }
+
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccount(List<Account> accounts) {
+        this.accounts = accounts;
     }
 }

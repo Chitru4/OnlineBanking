@@ -23,6 +23,14 @@ public class AccountService {
         if (user == null) {
             return null;
         }
+        String accountType = account.getType();
+        if (user.getAccounts() != null) {
+            for (Account userAccount : user.getAccounts()) {
+                if (userAccount.getType().equals(accountType)) {
+                    return null;
+                }
+            }
+        }
         account.setUser(user);
         accountRepository.save(account);
         return account;

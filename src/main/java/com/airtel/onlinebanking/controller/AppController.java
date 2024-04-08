@@ -72,13 +72,14 @@ public class AppController {
         }
     }
     @PostMapping(value = "/create-account")
-    public String createAccount(Principal principal, Account account) {
+    public String createAccount(Principal principal, Account account, RedirectAttributes redirectAttributes) {
         if (accountService.createAccount(principal.getName(), account) != null) {
-            return "transaction-success";
+            redirectAttributes.addFlashAttribute("success", "Account created successfully");
         }
         else {
-            return "error/500";
+            redirectAttributes.addFlashAttribute("error", "Account type already present");
         }
+        return "redirect:/create-account";
     }
     @PostMapping(value = "/transaction")
     public String doTransaction(Principal principal, Transaction transaction, RedirectAttributes redirectAttributes) {
