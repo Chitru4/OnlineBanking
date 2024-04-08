@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Transactions</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body>
+<p>
+    <h1><b>Past Transactions:</b></h1>
+</p>
+<p>
+    <b>List of Sent Transactions:</b>
+</p>
+
+<div th:if="${ not#lists.isEmpty(sentTransactions)}">
+    <table border="1">
+        <tr>
+            <th>Transaction Id</th>
+            <th>Date and Time of Transaction</th>
+            <th>Receiver's Account type</th>
+            <th>Transaction amount</th>
+            <th>To</th>
+        </tr>
+        <tr th:each="transaction : ${sentTransactions}">
+            <td th:text="${transaction.transactionId}"></td>
+            <td th:text="${transaction.timeStamp}"></td>
+            <td th:text="${transaction.accountType}"></td>
+            <td th:text="${transaction.amount}"></td>
+            <td th:text="${transaction.toUsername}"></td>
+        </tr>
+    </table>
+</div>
+
+<p>
+    <b>List of Received Transactions:</b>
+</p>
+
+<div th:if="${ not#lists.isEmpty(receivedTransactions)}">
+    <table border="1">
+        <tr>
+            <th>Transaction Id</th>
+            <th>Date and Time of Transaction</th>
+            <th>Receiver's Account type</th>
+            <th>Transaction amount</th>
+            <th>From</th>
+        </tr>
+        <tr th:each="transaction : ${receivedTransactions}">
+            <td th:text="${transaction.transactionId}"></td>
+            <td th:text="${transaction.timeStamp}"></td>
+            <td th:text="${transaction.accountType}"></td>
+            <td th:text="${transaction.amount}"></td>
+            <td th:text="${transaction.fromUsername}"></td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

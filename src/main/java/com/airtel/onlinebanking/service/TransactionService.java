@@ -8,10 +8,13 @@ import com.airtel.onlinebanking.repository.TransactionRepository;
 import com.airtel.onlinebanking.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
+@Transactional
 public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final UserRepository userRepository;
@@ -46,5 +49,12 @@ public class TransactionService {
         }
         transactionRepository.save(transaction);
         return 1;
+    }
+
+    public List<Transaction> getSentTransactions(String username) {
+        return transactionRepository.findByFromUsername(username);
+    }
+    public List<Transaction> getReceivedTransactions(String username) {
+        return transactionRepository.findByToUsername(username);
     }
 }

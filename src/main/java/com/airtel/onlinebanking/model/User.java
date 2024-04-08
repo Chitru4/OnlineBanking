@@ -19,6 +19,7 @@ public class User {
             strategy = GenerationType.SEQUENCE,
             generator = "user_sequence"
     )
+    @Column(name="id")
     private Long id;
     private String username;
     @NonNull

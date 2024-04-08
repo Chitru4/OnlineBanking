@@ -8,13 +8,13 @@ import java.time.LocalDateTime;
 public class Transaction {
     @Id
     @SequenceGenerator(
-            name = "user_sequence",
-            sequenceName = "user_sequence",
+            name = "transaction_sequence",
+            sequenceName = "transaction_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "user_sequence"
+            generator = "transaction_sequence"
     )
     private Long transactionId;
     private LocalDateTime timeStamp;
@@ -22,7 +22,9 @@ public class Transaction {
     private Long amount;
     private String fromUsername;
     private String toUsername;
-
+    @Transient
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Account account;
     public Transaction() {
     }
 

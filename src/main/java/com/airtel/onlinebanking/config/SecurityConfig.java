@@ -50,6 +50,7 @@ public class SecurityConfig {
                 )
                 .formLogin(login ->
                         login.usernameParameter("username")
+                                .loginPage("/login")
                                 .defaultSuccessUrl("/")
                                 .permitAll()
                 )

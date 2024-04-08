@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Transaction</title>
+</head>
 <body>
 <div>
     <form action="/transaction" method="post" th:object="${transaction}">
@@ -22,5 +25,6 @@
         <input type="submit"/>
     </form>
 </div>
+<div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
 </body>
 </html>

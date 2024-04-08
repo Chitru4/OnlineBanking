@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 
@@ -25,9 +26,14 @@ public class AppController {
         this.transactionService = transactionService;
         this.accountService = accountService;
     }
+    // Get mappings
     @RequestMapping(value = "")
     public String index() {
         return "index";
+    }
+    @RequestMapping(value = "/login")
+    public String login() {
+        return "login";
     }
     @RequestMapping(value = "/register")
     public String register(Model model) {
@@ -50,17 +56,19 @@ public class AppController {
         return "create-account";
     }
     @RequestMapping(value = "/past-transactions")
-    public String viewPastTransactions(Model model) {
-        model.addAttribute("account", new Account());
-        return "create-account";
+    public String viewPastTransactions(Principal principal, Model model) {
+        model.addAttribute("sentTransactions", transactionService.getSentTransactions(principal.getName()));
+        model.addAttribute("receivedTransactions", transactionService.getReceivedTransactions(principal.getName()));
+        return "past-transactions";
     }
+    // Post mappings
     @PostMapping(value = "/register")
     public String registerUser(User user) {
         if (userService.registerUser(user) != null) {
             return "register-success";
         }
         else {
-            return "error";
+            return "error/500";
         }
     }
     @PostMapping(value = "/create-account")
@@ -69,19 +77,26 @@ public class AppController {
             return "transaction-success";
         }
         else {
-            return "error";
+            return "error/500";
         }
     }
     @PostMapping(value = "/transaction")
-    public String doTransaction(Principal principal, Transaction transaction) {
-        int errorCode = transactionService.doTransaction(principal.getName(), transaction);
-        System.out.println(errorCode);
-        if (errorCode == 1) {
-            return "transaction-success";
-        }
-        else {
-            System.out.println();
-            return "error";
+    public String doTransaction(Principal principal, Transaction transaction, RedirectAttributes redirectAttributes) {
+        switch (transactionService.doTransaction(principal.getName(), transaction)) {
+            case 1 -> { return "transaction-success"; }
+            case -1 -> {
+                redirectAttributes.addFlashAttribute("error", "Low account balance");
+                return "redirect:/transaction";
+            }
+            case -2 -> {
+                redirectAttributes.addFlashAttribute("error", "The recipient username does not exist");
+                return "redirect:/transaction";
+            }
+            case 0 -> {
+                redirectAttributes.addFlashAttribute("error", "User account does not exist");
+                return "redirect:/transaction";
+            }
+            default -> { return "error/500"; }
         }
     }
 }
