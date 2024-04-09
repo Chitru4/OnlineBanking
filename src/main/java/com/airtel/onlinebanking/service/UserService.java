@@ -18,7 +18,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
     public User registerUser(User user) {
-        if (userRepository.findByUsername(user.getUsername()) != null) {
+        if (user.getUsername() == null || userRepository.findByUsername(user.getUsername()) != null) {
             return null;
         }
         String encodedPassword = encoder.encode(user.getPassword());
@@ -30,9 +30,10 @@ public class UserService {
         userRepository.save(user);
         return user;
     }
+    public User findByUser(String username) { return userRepository.findByUsername(username); }
 
-    public boolean deleteUser(String username) {
-        return userRepository.deleteByUsername(username);
+    public void deleteUser(String username) {
+        userRepository.deleteByUsername(username);
     }
 
     public List<User> showAllUsers() {

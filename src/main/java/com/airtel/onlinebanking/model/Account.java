@@ -3,6 +3,7 @@ package com.airtel.onlinebanking.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -28,14 +29,16 @@ public class Account {
     private List<Transaction> transactions;
     private String type;
     private long balance;
+    private LocalDateTime createdDate;
 
     public Account() {
     }
 
-    public Account(User user, String type, long balance) {
+    public Account(User user, String type, long balance, LocalDateTime createdDate) {
         this.user = user;
         this.type = type;
         this.balance = balance;
+        this.createdDate = createdDate;
     }
 
     public Long getAccountId() {
@@ -68,5 +71,21 @@ public class Account {
 
     public void setBalance(long balance) {
         this.balance = balance;
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
     }
 }

@@ -13,14 +13,16 @@
 <div th:if="${ not#lists.isEmpty(accounts)}">
     <table border="1">
         <tr>
+            <th>Username</th>
             <th>Account type</th>
             <th>Account balance</th>
-            <th>Username</th>
+            <th>Date-time created</th>
         </tr>
         <tr th:each="account : ${accounts}">
+            <td th:text="${account.user.username}"></td>
             <td th:text="${account.type}"></td>
             <td th:text="${account.balance}"></td>
-            <td th:text="${account.user.username}"></td>
+            <td th:text="${account.createdDate}"></td>
         </tr>
     </table>
 </div>
