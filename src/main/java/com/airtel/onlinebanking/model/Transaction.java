@@ -21,17 +21,17 @@ public class Transaction {
     private Long transactionId;
     private LocalDateTime timeStamp;
     private String accountType;
-    private Long amount;
+    private Double amount;
     private String fromUsername;
     private String toUsername;
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "account_account_id")
     private Account account;
     public Transaction() {
     }
 
-    public Transaction(LocalDateTime timeStamp, String accountType, Long amount, String fromUsername, String toUsername) {
+    public Transaction(LocalDateTime timeStamp, String accountType, Double amount, String fromUsername, String toUsername) {
         this.timeStamp = timeStamp;
         this.accountType = accountType;
         this.amount = amount;
@@ -63,11 +63,11 @@ public class Transaction {
         this.accountType = type;
     }
 
-    public Long getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(Long amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 

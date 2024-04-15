@@ -32,7 +32,7 @@ public class User {
     private String panNumber;
     private String email;
     private LocalDate dob;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Account> accounts;
     public User() {
     }

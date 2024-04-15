@@ -31,6 +31,7 @@ public class UserRepositoryTest {
         user.setUsername("qbc");
         user.setPassword("123");
         userRepository.save(user);
+
     }
     @AfterEach
     public void deleteUserData() {

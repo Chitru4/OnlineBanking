@@ -22,19 +22,19 @@ public class Account {
     private Long accountId;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name="user_id")
     private User user;
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Transaction> transactions;
     private String type;
-    private long balance;
+    private Double balance;
     private LocalDateTime createdDate;
 
     public Account() {
     }
 
-    public Account(User user, String type, long balance, LocalDateTime createdDate) {
+    public Account(User user, String type, Double balance, LocalDateTime createdDate) {
         this.user = user;
         this.type = type;
         this.balance = balance;
@@ -65,11 +65,11 @@ public class Account {
         this.type = type;
     }
 
-    public long getBalance() {
+    public Double getBalance() {
         return balance;
     }
 
-    public void setBalance(long balance) {
+    public void setBalance(Double balance) {
         this.balance = balance;
     }
 

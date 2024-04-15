@@ -60,12 +60,12 @@ public class TransactionServiceTests {
         account = new Account();
         account.setUser(user);
         account.setType("saving");
-        account.setBalance(1000000L);
+        account.setBalance(1000000D);
         account.setCreatedDate(LocalDateTime.now());
         accountRepository.save(account);
         transaction = new Transaction();
         transaction.setAccountType("saving");
-        transaction.setAmount(10000L);
+        transaction.setAmount(10000D);
         transaction.setTimeStamp(LocalDateTime.now());
         transaction.setFromUsername(user.getUsername());
         transaction.setToUsername(user.getUsername());

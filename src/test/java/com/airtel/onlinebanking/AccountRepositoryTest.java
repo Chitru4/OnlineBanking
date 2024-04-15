@@ -43,13 +43,13 @@ public class AccountRepositoryTest {
         account.setCreatedDate(LocalDateTime.now());
         account.setType("saving");
         account.setUser(user);
-        account.setBalance(10000000L);
+        account.setBalance(10000000D);
         accountRepository.save(account);
         account1 = new Account();
         account1.setCreatedDate(LocalDateTime.now());
         account1.setType("business");
         account1.setUser(user);
-        account1.setBalance(1000000L);
+        account1.setBalance(1000000D);
         accountRepository.save(account1);
     }
     @AfterEach

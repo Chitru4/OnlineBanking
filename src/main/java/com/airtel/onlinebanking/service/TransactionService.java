@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -19,6 +21,7 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final UserRepository userRepository;
     private final AccountRepository accountRepository;
+    private final static Double dailyTransactionLimit = 1_000_000D;
     @Autowired
     public TransactionService(TransactionRepository transactionRepository, UserRepository userRepository, AccountRepository accountRepository) {
         this.transactionRepository = transactionRepository;
@@ -34,12 +37,15 @@ public class TransactionService {
         if (accountFrom == null) {
             return 0;
         }
+        if (getAmountSentToday(user)+transaction.getAmount()>dailyTransactionLimit) {
+            return -3;
+        }
         Account accountTo = accountRepository.findByUserAndType(userRepository.findByUsername(transaction.getToUsername()), "saving");
         if (accountTo == null) {
             return -2;
         }
-        Long currentBalance = accountFrom.getBalance();
-        Long transactionAmount = transaction.getAmount();
+        Double currentBalance = accountFrom.getBalance();
+        Double transactionAmount = transaction.getAmount();
         if (currentBalance>=transactionAmount) {
             accountFrom.setBalance(currentBalance-transactionAmount);
             accountTo.setBalance(accountTo.getBalance()+transactionAmount);
@@ -50,6 +56,20 @@ public class TransactionService {
         transaction.setAccount(accountFrom);
         transactionRepository.save(transaction);
         return 1;
+    }
+
+    public Double getAmountSentToday(User user) {
+        Account account = accountRepository.findByUserAndType(user, "saving");
+        List<Transaction> transactions = account.getTransactions();
+        Double totalAmountSpendToday = 0D;
+        if (transactions != null) {
+            for (Transaction transaction : transactions) {
+                if (transaction.getTimeStamp().isAfter(LocalDate.now().atTime(LocalTime.MIN)) && transaction.getTimeStamp().isBefore(LocalDate.now().atTime(LocalTime.MAX))) {
+                    totalAmountSpendToday += transaction.getAmount();
+                }
+            }
+        }
+        return totalAmountSpendToday;
     }
 
     public List<Transaction> getSentTransactions(String username) {
