@@ -41,11 +41,11 @@ public class SecurityConfig {
         http.authenticationProvider(authenticationProvider());
         http.
                 authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/users").authenticated()
+                        auth.requestMatchers("/api/users").authenticated()
                                 .requestMatchers("/accounts").authenticated()
-                                .requestMatchers("/account-create").authenticated()
+                                .requestMatchers("/create-account").authenticated()
                                 .requestMatchers("/transaction").authenticated()
-                                .requestMatchers("/transactions").authenticated()
+                                .requestMatchers("/past-transactions").authenticated()
                                 .anyRequest().permitAll()
                 )
                 .formLogin(login ->

@@ -1,0 +1,28 @@
+2024-04-16 15:21:49 [main] INFO  : Starting OnlineBankingApplication using Java 17.0.3 with PID 5070 (/Users/CHITRAKSH/IdeaProjects/OnlineBanking/target/classes started by CHITRAKSH in /Users/CHITRAKSH/IdeaProjects/OnlineBanking)
+2024-04-16 15:21:49 [main] INFO  : No active profile set, falling back to 1 default profile: "default"
+2024-04-16 15:21:49 [main] INFO  : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-04-16 15:21:49 [main] INFO  : Finished Spring Data repository scanning in 15 ms. Found 3 JPA repository interfaces.
+2024-04-16 15:21:49 [main] INFO  : Tomcat initialized with port 8080 (http)
+2024-04-16 15:21:49 [main] INFO  : Initializing ProtocolHandler ["http-nio-8080"]
+2024-04-16 15:21:49 [main] INFO  : Starting service [Tomcat]
+2024-04-16 15:21:49 [main] INFO  : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2024-04-16 15:21:49 [main] INFO  : Initializing Spring embedded WebApplicationContext
+2024-04-16 15:21:49 [main] INFO  : Root WebApplicationContext: initialization completed in 477 ms
+2024-04-16 15:21:49 [main] INFO  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-04-16 15:21:49 [main] INFO  : HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-04-16 15:21:49 [main] INFO  : HHH000026: Second-level cache disabled
+2024-04-16 15:21:49 [main] INFO  : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-04-16 15:21:50 [main] INFO  : HikariPool-1 - Starting...
+2024-04-16 15:21:50 [main] INFO  : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@2b99c937
+2024-04-16 15:21:50 [main] INFO  : HikariPool-1 - Start completed.
+2024-04-16 15:21:50 [main] INFO  : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-04-16 15:21:50 [main] INFO  : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-04-16 15:21:50 [main] WARN  : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-04-16 15:21:50 [main] INFO  : Adding welcome page: class path resource [static/index.html]
+2024-04-16 15:21:50 [main] INFO  : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@b1e63b5, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@186537ac, org.springframework.security.web.context.SecurityContextHolderFilter@3abd7b20, org.springframework.security.web.header.HeaderWriterFilter@58ca1cad, org.springframework.web.filter.CorsFilter@4733662d, org.springframework.security.web.authentication.logout.LogoutFilter@51158fb1, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@44d36b56, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@589a82af, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@5edce7da, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@25502b1c, org.springframework.security.web.access.ExceptionTranslationFilter@4545cfc0, org.springframework.security.web.access.intercept.AuthorizationFilter@3420547]
+2024-04-16 15:21:50 [main] INFO  : Starting ProtocolHandler ["http-nio-8080"]
+2024-04-16 15:21:50 [main] INFO  : Tomcat started on port 8080 (http) with context path ''
+2024-04-16 15:21:50 [main] INFO  : Started OnlineBankingApplication in 1.763 seconds (process running for 2.049)
+2024-04-16 15:24:20 [SpringApplicationShutdownHook] INFO  : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-04-16 15:24:20 [SpringApplicationShutdownHook] INFO  : HikariPool-1 - Shutdown initiated...
+2024-04-16 15:24:20 [SpringApplicationShutdownHook] INFO  : HikariPool-1 - Shutdown completed.

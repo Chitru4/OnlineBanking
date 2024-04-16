@@ -93,6 +93,10 @@ public class AppController {
                 redirectAttributes.addFlashAttribute("error", "The recipient username does not exist");
                 return "redirect:/transaction";
             }
+            case -3 -> {
+                redirectAttributes.addFlashAttribute("error","Daily transaction amount limit reached");
+                return "redirect:/transaction";
+            }
             case 0 -> {
                 redirectAttributes.addFlashAttribute("error", "User account does not exist");
                 return "redirect:/transaction";
