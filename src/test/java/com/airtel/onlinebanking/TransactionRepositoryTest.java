@@ -13,8 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,44 +27,32 @@ public class TransactionRepositoryTest {
     private AccountRepository accountRepository;
     private User user;
     private Account account;
-    private Transaction transaction;
+    private Transaction transaction1;
+    private Transaction transaction2;
+
     @BeforeEach
     public void setUpUserAccountTransaction() {
-        user = new User();
-        user.setFirstName("qbc");
-        user.setLastName("dde");
-        user.setPanNumber("9241290724");
-        user.setAddress("abcVille");
-        user.setDob(LocalDate.parse("2002-09-22"));
-        user.setEmail("bbc@abc.com");
-        user.setMobile(997241894L);
-        user.setUsername("qbc");
-        user.setPassword("123");
+        TestData testData = new TestData();
+        user = testData.getUser();
         userRepository.save(user);
-        account = new Account();
-        account.setCreatedDate(LocalDateTime.now());
-        account.setType("saving");
-        account.setUser(user);
-        account.setBalance(10000000D);
+        account = testData.getAccount1();
         accountRepository.save(account);
-        transaction = new Transaction();
-        transaction.setAccount(account);
-        transaction.setFromUsername(user.getUsername());
-        transaction.setToUsername(user.getUsername());
-        transaction.setAmount(10000D);
-        transaction.setAccountType("saving");
-        transaction.setTimeStamp(LocalDateTime.now());
+        transaction1 = testData.getTransaction1();
+        transactionRepository.save(transaction1);
+        transaction2 = testData.getTransaction2();
+        transactionRepository.save(transaction2);
     }
     @AfterEach
     public void deleteUserAccountTransaction() {
         userRepository.delete(user);
         accountRepository.delete(account);
-        transactionRepository.delete(transaction);
+        transactionRepository.delete(transaction1);
+        transactionRepository.delete(transaction2);
     }
     @Test
-    @DisplayName("JUnit test to find transactions made from given user")
+    @DisplayName("JUnit test to find transactions made from given account")
     public void shouldReturnListOfTransactions() {
-        List<Transaction> savedTransactions = transactionRepository.findByFromUsername(user.getUsername());
+        List<Transaction> savedTransactions = transactionRepository.findByAccount(account);
 
         assertThat(savedTransactions).isNotNull();
     }

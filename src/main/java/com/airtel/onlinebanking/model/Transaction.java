@@ -18,12 +18,13 @@ public class Transaction {
             strategy = GenerationType.SEQUENCE,
             generator = "transaction_sequence"
     )
+    @Column(nullable = false)
     private Long transactionId;
     private LocalDateTime timeStamp;
-    private String accountType;
     private Double amount;
-    private String fromUsername;
-    private String toUsername;
+    private String type;
+    private String description;
+    private Long transferAccountId;
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "account_account_id")
@@ -31,12 +32,12 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(LocalDateTime timeStamp, String accountType, Double amount, String fromUsername, String toUsername) {
+    public Transaction(LocalDateTime timeStamp, Double amount, String type, String description, Long transferAccountId) {
         this.timeStamp = timeStamp;
-        this.accountType = accountType;
         this.amount = amount;
-        this.fromUsername = fromUsername;
-        this.toUsername = toUsername;
+        this.type = type;
+        this.description = description;
+        this.transferAccountId = transferAccountId;
     }
 
     public Long getTransactionId() {
@@ -55,14 +56,6 @@ public class Transaction {
         this.timeStamp = timeStamp;
     }
 
-    public String getAccountType() {
-        return accountType;
-    }
-
-    public void setAccountType(String type) {
-        this.accountType = type;
-    }
-
     public Double getAmount() {
         return amount;
     }
@@ -71,20 +64,20 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public String getFromUsername() {
-        return fromUsername;
+    public String getType() {
+        return type;
     }
 
-    public void setFromUsername(String fromUsername) {
-        this.fromUsername = fromUsername;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public String getToUsername() {
-        return toUsername;
+    public String getDescription() {
+        return description;
     }
 
-    public void setToUsername(String toUsername) {
-        this.toUsername = toUsername;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Account getAccount() {
@@ -93,5 +86,13 @@ public class Transaction {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public Long getTransferAccountId() {
+        return transferAccountId;
+    }
+
+    public void setTransferAccountId(Long transferAccountId) {
+        this.transferAccountId = transferAccountId;
     }
 }

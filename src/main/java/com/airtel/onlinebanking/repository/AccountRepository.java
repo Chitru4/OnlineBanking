@@ -10,6 +10,7 @@ import java.util.List;
 @Repository
 
 public interface AccountRepository extends JpaRepository<Account, Long> {
-    Account findByUserAndType(User user,String type);
     List<Account> findByUser(User user);
+    List<Account> findByUserAndType(User user, String type);
+    Account findByAccountId(Long accountId);
 }

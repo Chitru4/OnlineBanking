@@ -20,16 +20,8 @@ public class UserRepositoryTest {
     private User user;
     @BeforeEach
     public void setupUserData() {
-        user = new User();
-        user.setFirstName("qbc");
-        user.setLastName("dde");
-        user.setPanNumber("9241290724");
-        user.setAddress("abcVille");
-        user.setDob(LocalDate.parse("2002-09-22"));
-        user.setEmail("bbc@abc.com");
-        user.setMobile(997241894L);
-        user.setUsername("qbc");
-        user.setPassword("123");
+        TestData testData = new TestData();
+        user = testData.getUser();
         userRepository.save(user);
 
     }

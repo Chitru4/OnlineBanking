@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "account", uniqueConstraints = {@UniqueConstraint(columnNames = {"account_id"})})
@@ -13,6 +14,7 @@ public class Account {
     @SequenceGenerator(
             name = "account_sequence",
             sequenceName = "account_sequence",
+            initialValue = 1000000000,
             allocationSize = 1
     )
     @GeneratedValue(
@@ -30,15 +32,17 @@ public class Account {
     private String type;
     private Double balance;
     private LocalDateTime createdDate;
+    private int pin;
 
     public Account() {
     }
 
-    public Account(User user, String type, Double balance, LocalDateTime createdDate) {
+    public Account(User user, String type, Double balance, LocalDateTime createdDate, int pin) {
         this.user = user;
         this.type = type;
         this.balance = balance;
         this.createdDate = createdDate;
+        this.pin = pin;
     }
 
     public Long getAccountId() {
@@ -87,5 +91,13 @@ public class Account {
 
     public void setCreatedDate(LocalDateTime createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public int getPin() {
+        return pin;
+    }
+
+    public void setPin(int pin) {
+        this.pin = pin;
     }
 }

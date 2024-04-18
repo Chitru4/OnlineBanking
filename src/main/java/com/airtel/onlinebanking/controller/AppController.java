@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 public class AppController {
@@ -41,8 +42,11 @@ public class AppController {
         return "register";
     }
     @RequestMapping(value = "/transaction")
-    public String transaction(Model model) {
+    public String transaction(Principal principal, Model model) {
+        Long accountId = 0L;
         model.addAttribute("transaction", new Transaction());
+        model.addAttribute("accountId", accountId);
+        model.addAttribute("accountOptions", accountService.getAllAccounts(principal.getName()));
         return "transaction";
     }
     @RequestMapping(value = "/accounts")
@@ -57,8 +61,7 @@ public class AppController {
     }
     @RequestMapping(value = "/past-transactions")
     public String viewPastTransactions(Principal principal, Model model) {
-        model.addAttribute("sentTransactions", transactionService.getSentTransactions(principal.getName()));
-        model.addAttribute("receivedTransactions", transactionService.getReceivedTransactions(principal.getName()));
+        model.addAttribute("transactions", transactionService.getTransactions(principal.getName()));
         return "past-transactions";
     }
     // Post mappings
@@ -82,7 +85,8 @@ public class AppController {
         return "redirect:/create-account";
     }
     @PostMapping(value = "/transaction")
-    public String doTransaction(Principal principal, Transaction transaction, RedirectAttributes redirectAttributes) {
+    public String doTransaction(Principal principal, Transaction transaction, Long accountId, RedirectAttributes redirectAttributes) {
+        transaction.setAccount(accountService.getByAccountId(accountId));
         switch (transactionService.doTransaction(principal.getName(), transaction)) {
             case 1 -> { return "transaction-success"; }
             case -1 -> {
@@ -90,7 +94,7 @@ public class AppController {
                 return "redirect:/transaction";
             }
             case -2 -> {
-                redirectAttributes.addFlashAttribute("error", "The recipient username does not exist");
+                redirectAttributes.addFlashAttribute("error", "Incorrect pin");
                 return "redirect:/transaction";
             }
             case -3 -> {

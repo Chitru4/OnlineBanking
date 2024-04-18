@@ -26,35 +26,21 @@ public class CheckTableDependenciesTest {
     private AccountRepository accountRepository;
     private User user;
     private Account account;
-    private Transaction transaction;
+    private Transaction transaction1;
+    private Transaction transaction2;
+    private TestData testData;
 
     @BeforeEach
     public void setupUserData() {
-        user = new User();
-        user.setFirstName("dbc");
-        user.setLastName("dde");
-        user.setPanNumber("9241290724");
-        user.setAddress("abcVille");
-        user.setDob(LocalDate.parse("2002-09-22"));
-        user.setEmail("bbc@abc.com");
-        user.setMobile(997241894L);
-        user.setUsername("train-test");
-        user.setPassword("123");
+        testData = new TestData();
+        user = testData.getUser();
         userRepository.saveAndFlush(user);
-        account = new Account();
-        account.setUser(user);
-        account.setType("saving");
-        account.setBalance(1000000D);
-        account.setCreatedDate(LocalDateTime.now());
+        account = testData.getAccount1();
         accountRepository.saveAndFlush(account);
-        transaction = new Transaction();
-        transaction.setAccountType(account.getType());
-        transaction.setAmount(10000D);
-        transaction.setTimeStamp(LocalDateTime.now());
-        transaction.setFromUsername(user.getUsername());
-        transaction.setToUsername(user.getUsername());
-        transaction.setAccount(account);
-        transactionRepository.saveAndFlush(transaction);
+        transaction1 = testData.getTransaction1();
+        transactionRepository.saveAndFlush(transaction1);
+        transaction2 = testData.getTransaction2();
+        transactionRepository.saveAndFlush(transaction2);
     }
     @Test
     void deleteUser_ShouldDeleteAccountsAndTransactions() {
@@ -63,13 +49,14 @@ public class CheckTableDependenciesTest {
         assertThat(userRepository.findByUsername(user.getUsername())).isNotNull();
         accountRepository.delete(account);
         accountRepository.flush();
-        assertThat(accountRepository.findByUserAndType(user, account.getType())).isNotNull();
-        transactionRepository.delete(transaction);
+        assertThat(accountRepository.findByUserAndType(user, account.getType())).isNotEmpty();
+        transactionRepository.delete(transaction1);
+        transactionRepository.delete(transaction2);
         transactionRepository.flush();
-        assertThat(transactionRepository.findByFromUsername(user.getUsername())).isEmpty();
+        assertThat(transactionRepository.findByAccount(account)).isEmpty();
         accountRepository.delete(account);
         accountRepository.flush();
-        assertThat(accountRepository.findByUserAndType(user, account.getType())).isNull();
+        assertThat(accountRepository.findByUserAndType(user, account.getType())).isEmpty();
         userRepository.delete(user);
         userRepository.flush();
         assertThat(userRepository.findByUsername(user.getUsername())).isNull();

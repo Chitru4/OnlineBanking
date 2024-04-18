@@ -18,22 +18,11 @@ public class UserServiceTests {
     private UserService userService;
     @Test
     void addUser_ShouldAddSuccessfully() {
-        if (userService.findByUser("bbc")!=null) {
-            deleteUser_ShouldDeleteSuccessfully();
-        }
-        User user = new User();
-        user.setFirstName("bbc");
-        user.setLastName("dde");
-        user.setPanNumber("9241290724");
-        user.setAddress("abcVille");
-        user.setDob(LocalDate.parse("2002-09-22"));
-        user.setEmail("bbc@abc.com");
-        user.setMobile(997241894L);
-        user.setUsername("cbc");
-        user.setPassword("123");
+        TestData testData = new TestData();
+        User user = testData.getUser();
         userService.registerUser(user);
         assertAll(
-                () -> assertNotNull(userService.findByUser("cbc"))
+                () -> assertNotNull(userService.findByUser("bbc"))
         );
     }
     @Test

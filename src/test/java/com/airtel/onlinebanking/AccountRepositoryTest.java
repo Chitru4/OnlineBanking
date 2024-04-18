@@ -24,51 +24,36 @@ public class AccountRepositoryTest {
     @Autowired
     private UserRepository userRepository;
     private User user;
-    private Account account;
     private Account account1;
+    private Account account2;
+
     @BeforeEach
     public void setAccountAndUser() {
-        user = new User();
-        user.setFirstName("qbc");
-        user.setLastName("dde");
-        user.setPanNumber("9241290724");
-        user.setAddress("abcVille");
-        user.setDob(LocalDate.parse("2002-09-22"));
-        user.setEmail("bbc@abc.com");
-        user.setMobile(997241894L);
-        user.setUsername("qbc");
-        user.setPassword("123");
+        TestData testData = new TestData();
+        user = testData.getUser();
         userRepository.save(user);
-        account = new Account();
-        account.setCreatedDate(LocalDateTime.now());
-        account.setType("saving");
-        account.setUser(user);
-        account.setBalance(10000000D);
-        accountRepository.save(account);
-        account1 = new Account();
-        account1.setCreatedDate(LocalDateTime.now());
-        account1.setType("business");
-        account1.setUser(user);
-        account1.setBalance(1000000D);
+        account1 = testData.getAccount1();
         accountRepository.save(account1);
+        account2 = testData.getAccount2();
+        accountRepository.save(account2);
     }
     @AfterEach
     public void deleteAccountAndUser() {
         userRepository.delete(user);
-        accountRepository.delete(account);
         accountRepository.delete(account1);
+        accountRepository.delete(account2);
     }
     @Test
     @DisplayName("JUnit test to save account to valid user")
     public void shouldSaveAccount() {
-        Account savedAccount = accountRepository.save(account);
+        Account savedAccount = accountRepository.save(account1);
 
         assertThat(savedAccount).isNotNull();
     }
     @Test
     @DisplayName("JUnit test to find accounts linked to user")
     public void shouldReturnAccountOfGivenType() {
-        Account accounts = accountRepository.findByUserAndType(user, account.getType());
+        Account accounts = accountRepository.findByAccountId(account1.getAccountId());
 
         assertThat(accounts).isNotNull();
     }

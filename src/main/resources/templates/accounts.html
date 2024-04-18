@@ -17,12 +17,14 @@
             <th>Account type</th>
             <th>Account balance</th>
             <th>Date-time created</th>
+            <th>Account number</th>
         </tr>
         <tr th:each="account : ${accounts}">
             <td th:text="${account.user.username}"></td>
             <td th:text="${account.type}"></td>
             <td th:text="${account.balance}"></td>
             <td th:text="${account.createdDate}"></td>
+            <td th:text="${account.accountId}"></td>
         </tr>
     </table>
 </div>

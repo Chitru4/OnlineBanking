@@ -24,14 +24,6 @@ public class AccountService {
         if (user == null) {
             return null;
         }
-        String accountType = account.getType();
-        if (user.getAccounts() != null) {
-            for (Account userAccount : user.getAccounts()) {
-                if (userAccount.getType().equals(accountType)) {
-                    return null;
-                }
-            }
-        }
         account.setUser(user);
         account.setCreatedDate(LocalDateTime.now());
         accountRepository.save(account);
@@ -40,5 +32,7 @@ public class AccountService {
     public List<Account> getAllAccounts(String username) {
         return accountRepository.findByUser(userRepository.findByUsername(username));
     }
-
+    public Account getByAccountId(Long accountId) {
+        return accountRepository.findByAccountId(accountId);
+    }
 }

@@ -20,6 +20,14 @@
                    th:field="*{balance}"
                    name="amount"/>
         </label>
+        <br>Add a suitable pin for your account<br>
+        <label>
+            <input type="number" step="any"
+                   minlength="4"
+                   maxlength="4"
+                   th:field="*{pin}"
+                   name="pin"/>
+        </label>
         <br>
         <input type="submit"/>
         <br>

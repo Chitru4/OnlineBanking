@@ -10,47 +10,26 @@
     <h1><b>Past Transactions:</b></h1>
 </p>
 <p>
-    <b>List of Sent Transactions:</b>
+    <b>List of User Transactions:</b>
 </p>
 
-<div th:if="${ not#lists.isEmpty(sentTransactions)}">
+<div th:if="${ not#lists.isEmpty(transactions)}">
     <table border="1">
         <tr>
             <th>Transaction Id</th>
+            <th>Account Id</th>
             <th>Date and Time of Transaction</th>
             <th>Receiver's Account type</th>
             <th>Transaction amount</th>
-            <th>To</th>
+            <th>Transfer account id</th>
         </tr>
-        <tr th:each="transaction : ${sentTransactions}">
+        <tr th:each="transaction : ${transactions}">
             <td th:text="${transaction.transactionId}"></td>
+            <td th:text="${transaction.account.accountId}"></td>
             <td th:text="${transaction.timeStamp}"></td>
-            <td th:text="${transaction.accountType}"></td>
+            <td th:text="${transaction.type}"></td>
             <td th:text="${transaction.amount}"></td>
-            <td th:text="${transaction.toUsername}"></td>
-        </tr>
-    </table>
-</div>
-
-<p>
-    <b>List of Received Transactions:</b>
-</p>
-
-<div th:if="${ not#lists.isEmpty(receivedTransactions)}">
-    <table border="1">
-        <tr>
-            <th>Transaction Id</th>
-            <th>Date and Time of Transaction</th>
-            <th>Receiver's Account type</th>
-            <th>Transaction amount</th>
-            <th>From</th>
-        </tr>
-        <tr th:each="transaction : ${receivedTransactions}">
-            <td th:text="${transaction.transactionId}"></td>
-            <td th:text="${transaction.timeStamp}"></td>
-            <td th:text="${transaction.accountType}"></td>
-            <td th:text="${transaction.amount}"></td>
-            <td th:text="${transaction.fromUsername}"></td>
+            <td th:text="${transaction.transferAccountId}"></td>
         </tr>
     </table>
 </div>

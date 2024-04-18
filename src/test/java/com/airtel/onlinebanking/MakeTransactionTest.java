@@ -44,6 +44,7 @@ public class MakeTransactionTest {
         mockMvc.perform(post("http://localhost:" + port + "/create-account")
                         .param("type","saving")
                         .param("balance", "100000")
+                        .param("pin","1234")
                 )
                 .andExpect(redirectedUrl("/create-account"));
 
@@ -56,9 +57,10 @@ public class MakeTransactionTest {
                 .contains("bbc"));
 
         mockMvc.perform(post("http://localhost" + port + "/transaction")
-                    .param("toUsername","bbc")
+                    .param("description","THIS IS FOR TESTING")
                     .param("amount","1000")
-                    .param("accountType","saving")
+                    .param("transferAccountId","1000000000")
+                    .param("accountId","1000000000")
                 )
                 .andExpect(status().isOk());
 
@@ -68,6 +70,6 @@ public class MakeTransactionTest {
                 .andReturn()
                 .getResponse()
                 .getContentAsString()
-                .contains("bbc"));
+                .contains("1000000000"));
     }
 }
