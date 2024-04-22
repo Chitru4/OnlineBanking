@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Transaction</title>
+    <title>Fund-transfer</title>
 </head>
 <body>
 <div>
-    <form action="/transaction" method="post" th:object="${transaction}">
+    <form action="/fund-transfer" method="post" th:object="${transaction}">
         <b>Enter the details:</b> <br>
         <br>Select your account number<br>
         <select class="form-control" id="accountId" name="accountId" required="required">
+            <option value="0">select option</option>
+            <option th:each="option : ${accountOptions}" th:value="${option.getAccountId()}" th:text="${option.getAccountId().toString()+option.getType().toString()}"></option>
+        </select>
+        <br>Account Number<br>
+        <select th:field="*{transferAccountId}" class="form-control" id="transferAccountId" required="required">
             <option value="0">select option</option>
             <option th:each="option : ${accountOptions}" th:value="${option.getAccountId()}" th:text="${option.getAccountId().toString()+option.getType().toString()}"></option>
         </select>
@@ -16,10 +21,6 @@
         <input type="number" step="any"
                th:field="*{amount}"
                name="amount"/>
-        <br>Account number<br>
-        <input type="text"
-               th:field="*{transferAccountId}"
-               name="account number"/>
         <br>Enter description<br>
         <input type="text"
                th:field="*{description}"

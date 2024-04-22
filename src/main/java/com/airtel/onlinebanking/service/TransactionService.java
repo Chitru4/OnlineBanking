@@ -2,7 +2,6 @@ package com.airtel.onlinebanking.service;
 
 import com.airtel.onlinebanking.model.Account;
 import com.airtel.onlinebanking.model.Transaction;
-import com.airtel.onlinebanking.model.User;
 import com.airtel.onlinebanking.repository.AccountRepository;
 import com.airtel.onlinebanking.repository.TransactionRepository;
 import com.airtel.onlinebanking.repository.UserRepository;
@@ -34,7 +33,7 @@ public class TransactionService {
         Account debitAccount = transaction.getAccount();
         Transaction debitTransaction = new Transaction();
         Transaction creditTransaction = new Transaction();
-        if (debitAccount == null || creditAccount == null) {
+        if (debitAccount == null || creditAccount == null || debitAccount.getAccountId().equals(creditAccount.getAccountId())) {
             return 0;
         }
 //        if (pin != creditAccount.getPin()) {
@@ -74,7 +73,9 @@ public class TransactionService {
         Account debitFundAccount = transaction.getAccount();
         Transaction debitFundTransaction = new Transaction();
         Transaction creditFundTransaction = new Transaction();
-        if (debitFundAccount == null || creditFundAccount == null) {
+        System.out.println(creditFundAccount.getAccountId());
+        System.out.println(debitFundAccount.getAccountId());
+        if (debitFundAccount.getAccountId().equals(creditFundAccount.getAccountId())) {
             return 0;
         }
         if (debitFundAccount.getBalance()<transaction.getAmount()) {

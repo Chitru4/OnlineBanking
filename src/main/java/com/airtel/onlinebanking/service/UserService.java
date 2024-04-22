@@ -30,6 +30,9 @@ public class UserService {
         userRepository.save(user);
         return user;
     }
+    public void repositorySave(User user) {
+        userRepository.save(user);
+    }
     public User findByUser(String username) { return userRepository.findByUsername(username); }
 
     public void deleteUser(String username) {

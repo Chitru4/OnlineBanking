@@ -24,7 +24,8 @@ public class TransactionServiceTests {
     @Autowired
     private TransactionService transactionService;
     private User user;
-    private Account account;
+    private Account account1;
+    private Account account2;
     private Transaction transaction;
 
     @BeforeEach
@@ -32,8 +33,10 @@ public class TransactionServiceTests {
         TestData testData = new TestData();
         user = testData.getUser();
         userRepository.save(user);
-        account = testData.getAccount1();
-        accountRepository.save(account);
+        account1 = testData.getAccount1();
+        accountRepository.save(account1);
+        account2 = testData.getAccount2();
+        accountRepository.save(account2);
         transaction = testData.getTransaction1();
     }
     @Test

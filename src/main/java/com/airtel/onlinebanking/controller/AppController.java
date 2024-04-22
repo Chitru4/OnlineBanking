@@ -7,6 +7,7 @@ import com.airtel.onlinebanking.service.AccountService;
 import com.airtel.onlinebanking.service.TransactionService;
 import com.airtel.onlinebanking.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
-import java.util.List;
 
 @Controller
 public class AppController {
@@ -27,7 +27,9 @@ public class AppController {
         this.transactionService = transactionService;
         this.accountService = accountService;
     }
-    // Get mappings
+    /**
+     * GET MAPPINGS
+     **/
     @RequestMapping(value = "")
     public String index() {
         return "index";
@@ -64,7 +66,22 @@ public class AppController {
         model.addAttribute("transactions", transactionService.getTransactions(principal.getName()));
         return "past-transactions";
     }
-    // Post mappings
+    @RequestMapping(value="/fund-transfer")
+    public String fundTransfer(Principal principal, Model model) {
+        Long accountId = 0L;
+        model.addAttribute("transaction", new Transaction());
+        model.addAttribute("accountId", accountId);
+        model.addAttribute("accountOptions", accountService.getAllAccounts(principal.getName()));
+        return "fund-transfer";
+    }
+    @RequestMapping(value = "/manage-user")
+    public String manageAccount(Principal principal, Model model) {
+        model.addAttribute("user", userService.findByUser(principal.getName()));
+        return "manage-user";
+    }
+    /**
+     * POST MAPPINGS
+     **/
     @PostMapping(value = "/register")
     public String registerUser(User user) {
         if (userService.registerUser(user) != null) {
@@ -107,5 +124,37 @@ public class AppController {
             }
             default -> { return "error/500"; }
         }
+    }
+
+    @PostMapping(value = "/fund-transfer")
+    public String doFundTransaction(Principal principal, Transaction transaction, Long accountId, RedirectAttributes redirectAttributes) {
+        transaction.setAccount(accountService.getByAccountId(accountId));
+        switch (transactionService.doFundTransaction(principal.getName(), transaction)) {
+            case 1 -> { return "transaction-success"; }
+            case -1 -> {
+                redirectAttributes.addFlashAttribute("error", "Low account balance");
+                return "redirect:/fund-transfer";
+            }
+            case 0 -> {
+                redirectAttributes.addFlashAttribute("error", "User account does not exist/ same account");
+                return "redirect:/fund-transfer";
+            }
+            default -> { return "error/500"; }
+        }
+    }
+    @PostMapping(value = "/manage-user")
+    public String changeUserDetails(Principal principal,User user, RedirectAttributes redirectAttributes) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        User newUser = userService.findByUser(principal.getName());
+        newUser.setFirstName(user.getFirstName());
+        newUser.setLastName(user.getLastName());
+        newUser.setMobile(user.getMobile());
+        newUser.setAddress(user.getAddress());
+        if (!passwordEncoder.matches(user.getPassword(), newUser.getPassword())) {
+            redirectAttributes.addFlashAttribute("error", "Wrong Password");
+            return "redirect:/manage-user";
+        }
+        userService.repositorySave(newUser);
+        return "index";
     }
 }
