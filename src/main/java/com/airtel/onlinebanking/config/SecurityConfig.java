@@ -46,8 +46,8 @@ public class SecurityConfig {
                                 .requestMatchers("/create-account").authenticated()
                                 .requestMatchers("/transaction").authenticated()
                                 .requestMatchers("/past-transactions").authenticated()
-                                .requestMatchers("fund-transfer").authenticated()
-                                .requestMatchers("manage-user").authenticated()
+                                .requestMatchers("/fund-transfer").authenticated()
+                                .requestMatchers("/manage-user").authenticated()
                                 .anyRequest().permitAll()
                 )
                 .formLogin(login ->

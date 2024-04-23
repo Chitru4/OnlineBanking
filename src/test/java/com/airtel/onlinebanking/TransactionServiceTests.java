@@ -41,6 +41,6 @@ public class TransactionServiceTests {
     }
     @Test
     void doTransaction_ShouldCompleteSuccessfully() {
-        assertThat((transactionService.doTransaction(user.getUsername(), transaction))).isEqualTo(1);
+        assertThat((transactionService.doFundTransaction(user.getUsername(), transaction))).isEqualTo(1);
     }
 }

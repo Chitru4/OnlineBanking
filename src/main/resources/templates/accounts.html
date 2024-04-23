@@ -22,7 +22,7 @@
         <tr th:each="account : ${accounts}">
             <td th:text="${account.user.username}"></td>
             <td th:text="${account.type}"></td>
-            <td th:text="${account.balance}"></td>
+            <td th:text="${#numbers.formatDecimal(account.balance, 0, 2)}"></td>
             <td th:text="${account.createdDate}"></td>
             <td th:text="${account.accountId}"></td>
         </tr>

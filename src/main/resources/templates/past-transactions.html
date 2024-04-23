@@ -18,18 +18,18 @@
         <tr>
             <th>Transaction Id</th>
             <th>Account Id</th>
-            <th>Date and Time of Transaction</th>
-            <th>Receiver's Account type</th>
-            <th>Transaction amount</th>
             <th>Transfer account id</th>
+            <th>Date and Time of Transaction</th>
+            <th>Transaction Type</th>
+            <th>Transaction amount</th>
         </tr>
         <tr th:each="transaction : ${transactions}">
             <td th:text="${transaction.transactionId}"></td>
             <td th:text="${transaction.account.accountId}"></td>
+            <td th:text="${transaction.transferAccountId}"></td>
             <td th:text="${transaction.timeStamp}"></td>
             <td th:text="${transaction.type}"></td>
             <td th:text="${transaction.amount}"></td>
-            <td th:text="${transaction.transferAccountId}"></td>
         </tr>
     </table>
 </div>

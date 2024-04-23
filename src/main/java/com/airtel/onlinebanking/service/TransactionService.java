@@ -6,6 +6,7 @@ import com.airtel.onlinebanking.repository.AccountRepository;
 import com.airtel.onlinebanking.repository.TransactionRepository;
 import com.airtel.onlinebanking.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,14 +37,14 @@ public class TransactionService {
         if (debitAccount == null || creditAccount == null || debitAccount.getAccountId().equals(creditAccount.getAccountId())) {
             return 0;
         }
-//        if (pin != creditAccount.getPin()) {
-//            return -2;
-//        }
-        if (transaction.getAmount()+getAmountSentToday(debitAccount)>dailyTransactionLimit) {
-            return -3;
+        else if(accountRepository.findByUser(userRepository.findByUsername(username)).contains(creditAccount)) {
+            return -2;
         }
-        if (debitAccount.getBalance()<transaction.getAmount()) {
+        else if (debitAccount.getBalance()<transaction.getAmount()) {
             return -1;
+        }
+        else if (transaction.getAmount()+getAmountSentToday(debitAccount)>dailyTransactionLimit) {
+            return -3;
         }
         creditTransaction.setType("credit");
         creditTransaction.setAccount(creditAccount);
@@ -73,12 +74,13 @@ public class TransactionService {
         Account debitFundAccount = transaction.getAccount();
         Transaction debitFundTransaction = new Transaction();
         Transaction creditFundTransaction = new Transaction();
-        System.out.println(creditFundAccount.getAccountId());
-        System.out.println(debitFundAccount.getAccountId());
-        if (debitFundAccount.getAccountId().equals(creditFundAccount.getAccountId())) {
+        if (debitFundAccount == null || creditFundAccount == null) {
+            return -2;
+        }
+        else if (debitFundAccount.getAccountId().equals(creditFundAccount.getAccountId())) {
             return 0;
         }
-        if (debitFundAccount.getBalance()<transaction.getAmount()) {
+        else if (debitFundAccount.getBalance()<transaction.getAmount()) {
             return -1;
         }
         creditFundTransaction.setType("credit-fund");
@@ -86,13 +88,13 @@ public class TransactionService {
         creditFundTransaction.setTimeStamp(LocalDateTime.now());
         creditFundTransaction.setDescription(transaction.getDescription());
         creditFundTransaction.setAmount(transaction.getAmount());
-        creditFundTransaction.setTransferAccountId(creditFundAccount.getAccountId());
+        creditFundTransaction.setTransferAccountId(debitFundAccount.getAccountId());
         debitFundTransaction.setType("debit-fund");
         debitFundTransaction.setAccount(debitFundAccount);
         debitFundTransaction.setTimeStamp(creditFundTransaction.getTimeStamp());
         debitFundTransaction.setDescription(transaction.getDescription());
         debitFundTransaction.setAmount(transaction.getAmount());
-        debitFundTransaction.setTransferAccountId(debitFundAccount.getAccountId());
+        debitFundTransaction.setTransferAccountId(creditFundAccount.getAccountId());
 
         creditFundAccount.setBalance(creditFundAccount.getBalance()+transaction.getAmount());
         debitFundAccount.setBalance(debitFundAccount.getBalance()-transaction.getAmount());
@@ -100,6 +102,10 @@ public class TransactionService {
         transactionRepository.save(debitFundTransaction);
         transactionRepository.save(creditFundTransaction);
         return 1;
+    }
+    @Scheduled(cron="0 0 0 * * *", zone = "GMT+5:00")
+    public void doScheduledTransaction() {
+        System.out.println("Hello");
     }
 
     public Double getAmountSentToday(Account account) {

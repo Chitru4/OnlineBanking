@@ -12,19 +12,24 @@
             <option value="0">select option</option>
             <option th:each="option : ${accountOptions}" th:value="${option.getAccountId()}" th:text="${option.getAccountId().toString()+option.getType().toString()}"></option>
         </select>
-        <br>Amount<br>
-        <input type="number" step="any"
-               th:field="*{amount}"
-               name="amount"/>
         <br>Account number<br>
         <input type="text"
                th:field="*{transferAccountId}"
                name="account number"/>
+        <br>Amount<br>
+        <input type="number" step="any"
+               th:field="*{amount}"
+               name="amount"/>
         <br>Enter description<br>
         <input type="text"
                th:field="*{description}"
                name="description"
                value="description"/>
+        <br>Enter pin<br>
+        <input type="number"
+               th:object="${pin}"
+               name="pin"
+               value="pin"/>
         <br>
         <input type="submit"/>
     </form>

@@ -62,7 +62,7 @@ public class MakeTransactionTest {
                 .getContentAsString()
                 .contains("bbc"));
 
-        mockMvc.perform(post("http://localhost" + port + "/transaction")
+        mockMvc.perform(post("http://localhost" + port + "/fund-transfer")
                     .param("description","THIS IS FOR TESTING")
                     .param("amount","1000")
                     .param("transferAccountId","1000000001")

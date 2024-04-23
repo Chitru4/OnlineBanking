@@ -46,8 +46,10 @@ public class AppController {
     @RequestMapping(value = "/transaction")
     public String transaction(Principal principal, Model model) {
         Long accountId = 0L;
+        Integer pin = 0;
         model.addAttribute("transaction", new Transaction());
         model.addAttribute("accountId", accountId);
+        model.addAttribute("pin", pin);
         model.addAttribute("accountOptions", accountService.getAllAccounts(principal.getName()));
         return "transaction";
     }
@@ -102,8 +104,12 @@ public class AppController {
         return "redirect:/create-account";
     }
     @PostMapping(value = "/transaction")
-    public String doTransaction(Principal principal, Transaction transaction, Long accountId, RedirectAttributes redirectAttributes) {
+    public String doTransaction(Principal principal, Transaction transaction, Long accountId, Integer pin, RedirectAttributes redirectAttributes) {
         transaction.setAccount(accountService.getByAccountId(accountId));
+        if (!(transaction.getAccount().getPin() == pin)) {
+            redirectAttributes.addFlashAttribute("error", "Incorrect pin");
+            return "redirect:/transaction";
+        }
         switch (transactionService.doTransaction(principal.getName(), transaction)) {
             case 1 -> { return "transaction-success"; }
             case -1 -> {
@@ -111,8 +117,8 @@ public class AppController {
                 return "redirect:/transaction";
             }
             case -2 -> {
-                redirectAttributes.addFlashAttribute("error", "Incorrect pin");
-                return "redirect:/transaction";
+                redirectAttributes.addFlashAttribute("error", "Cannot transfer to same user (Use fund transfer instead)");
+                return "redirect:/fund-transfer";
             }
             case -3 -> {
                 redirectAttributes.addFlashAttribute("error","Daily transaction amount limit reached");
@@ -133,6 +139,10 @@ public class AppController {
             case 1 -> { return "transaction-success"; }
             case -1 -> {
                 redirectAttributes.addFlashAttribute("error", "Low account balance");
+                return "redirect:/fund-transfer";
+            }
+            case -2 -> {
+                redirectAttributes.addFlashAttribute("error", "Choose the account number");
                 return "redirect:/fund-transfer";
             }
             case 0 -> {
