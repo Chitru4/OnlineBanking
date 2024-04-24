@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>ScheduledTransactions</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body>
+<p>
+<h1><b>All User Scheduled Transactions:</b></h1>
+</p>
+<p>
+    <b>List of User Scheduled Transactions:</b>
+</p>
+
+<div th:if="${ not#lists.isEmpty(scheduledTransactions)}">
+    <table border="1">
+        <tr>
+            <th>Scheduled Transaction Id</th>
+            <th>Account Id</th>
+            <th>Transfer account id</th>
+            <th>Next due Date and Time</th>
+            <th>Amount</th>
+            <th>Payment rate</th>
+            <th>Times left</th>
+        </tr>
+        <tr th:each="scheduledTransaction : ${scheduledTransactions}">
+            <td th:text="${scheduledTransaction.id}"></td>
+            <td th:text="${scheduledTransaction.fromAccountId}"></td>
+            <td th:text="${scheduledTransaction.toAccountId}"></td>
+            <td th:text="${scheduledTransaction.dueDateTime}"></td>
+            <td th:text="${scheduledTransaction.amount}"></td>
+            <td th:text="${scheduledTransaction.minuteIncrement}"></td>
+            <td th:text="${scheduledTransaction.counter}"></td>
+        </tr>
+    </table>
+</div>
+<h4><a th:href="@{/}">Click here to go back</a></h4>
+</body>
+</html>

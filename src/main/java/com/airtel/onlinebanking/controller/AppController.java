@@ -1,9 +1,11 @@
 package com.airtel.onlinebanking.controller;
 
 import com.airtel.onlinebanking.model.Account;
+import com.airtel.onlinebanking.model.ScheduledTransaction;
 import com.airtel.onlinebanking.model.Transaction;
 import com.airtel.onlinebanking.model.User;
 import com.airtel.onlinebanking.service.AccountService;
+import com.airtel.onlinebanking.service.ScheduledTransactionService;
 import com.airtel.onlinebanking.service.TransactionService;
 import com.airtel.onlinebanking.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +21,15 @@ import java.security.Principal;
 @Controller
 public class AppController {
     private final UserService userService;
-    private final TransactionService transactionService;
     private final AccountService accountService;
+    private final TransactionService transactionService;
+    private final ScheduledTransactionService scheduledTransactionService;
     @Autowired
-    public AppController(UserService userService, TransactionService transactionService, AccountService accountService) {
+    public AppController(UserService userService, AccountService accountService, TransactionService transactionService, ScheduledTransactionService scheduledTransactionService) {
         this.userService = userService;
-        this.transactionService = transactionService;
         this.accountService = accountService;
+        this.transactionService = transactionService;
+        this.scheduledTransactionService = scheduledTransactionService;
     }
     /**
      * GET MAPPINGS
@@ -81,6 +85,17 @@ public class AppController {
         model.addAttribute("user", userService.findByUser(principal.getName()));
         return "manage-user";
     }
+    @RequestMapping(value="/setup-auto-pay")
+    public String setupScheduledTransaction(Principal principal, Model model) {
+        model.addAttribute("scheduledTransaction", new ScheduledTransaction());
+        model.addAttribute("accountOptions", accountService.getAllAccounts(principal.getName()));
+        return "setup-auto-pay";
+    }
+    @RequestMapping(value="/manage-auto-pay")
+    public String showScheduledTransaction(Principal principal, Model model) {
+        model.addAttribute("scheduledTransactions", scheduledTransactionService.getAllUserScheduledTransactions(principal.getName()));
+        return "manage-auto-pay";
+    }
     /**
      * POST MAPPINGS
      **/
@@ -110,7 +125,7 @@ public class AppController {
             redirectAttributes.addFlashAttribute("error", "Incorrect pin");
             return "redirect:/transaction";
         }
-        switch (transactionService.doTransaction(principal.getName(), transaction)) {
+        switch (transactionService.doTransaction(principal.getName(), transaction, "")) {
             case 1 -> { return "transaction-success"; }
             case -1 -> {
                 redirectAttributes.addFlashAttribute("error", "Low account balance");
@@ -135,14 +150,10 @@ public class AppController {
     @PostMapping(value = "/fund-transfer")
     public String doFundTransaction(Principal principal, Transaction transaction, Long accountId, RedirectAttributes redirectAttributes) {
         transaction.setAccount(accountService.getByAccountId(accountId));
-        switch (transactionService.doFundTransaction(principal.getName(), transaction)) {
+        switch (transactionService.doTransaction(principal.getName(), transaction, "-fund")) {
             case 1 -> { return "transaction-success"; }
             case -1 -> {
                 redirectAttributes.addFlashAttribute("error", "Low account balance");
-                return "redirect:/fund-transfer";
-            }
-            case -2 -> {
-                redirectAttributes.addFlashAttribute("error", "Choose the account number");
                 return "redirect:/fund-transfer";
             }
             case 0 -> {
@@ -165,6 +176,11 @@ public class AppController {
             return "redirect:/manage-user";
         }
         userService.repositorySave(newUser);
+        return "index";
+    }
+    @PostMapping(value = "/setup-auto-pay")
+    public String setupScheduledTransaction(Principal principal, ScheduledTransaction scheduledTransaction, RedirectAttributes redirectAttributes) {
+        scheduledTransactionService.saveScheduledTransaction(scheduledTransaction);
         return "index";
     }
 }

@@ -48,6 +48,8 @@ public class SecurityConfig {
                                 .requestMatchers("/past-transactions").authenticated()
                                 .requestMatchers("/fund-transfer").authenticated()
                                 .requestMatchers("/manage-user").authenticated()
+                                .requestMatchers("/setup-auto-pay").authenticated()
+                                .requestMatchers("/manage-auto-pay").authenticated()
                                 .anyRequest().permitAll()
                 )
                 .formLogin(login ->

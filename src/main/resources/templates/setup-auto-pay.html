@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Setup auto pay</title>
+</head>
+<body>
+<div>
+    <form action="/setup-auto-pay" method="post" th:object="${scheduledTransaction}">
+        <b>Enter the details:</b> <br>
+        <br>Select your account number<br>
+        <select th:field="*{fromAccountId}" class="form-control" id="fromAccountId" name="toAccountId" required="required">
+            <option value="0">select option</option>
+            <option th:each="option : ${accountOptions}" th:value="${option.getAccountId()}" th:text="${option.getAccountId().toString()+option.getType().toString()}"></option>
+        </select>
+        <br>Account number<br>
+        <input type="text"
+               th:field="*{toAccountId}"
+               name="account number"/>
+        <br>Amount<br>
+        <input type="number" step="any"
+               th:field="*{amount}"
+               name="amount"/>
+        <br>Enter delay in minutes<br>
+        <input type="number"
+               th:field="*{minuteIncrement}"
+               name="minute-increment"
+               value="minute-increment"/>
+        <br>Enter number of times you want transaction to take place<br>
+        <input type="number"
+               th:field="*{counter}"
+               name="counter"
+               value="counter"/>
+        <br>
+        <input type="submit"/>
+    </form>
+</div>
+<h4><a th:href="@{/}">Click here to go back</a></h4>
+<div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
+</body>
+</html>

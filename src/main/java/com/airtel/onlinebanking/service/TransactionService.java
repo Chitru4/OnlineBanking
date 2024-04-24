@@ -28,8 +28,7 @@ public class TransactionService {
         this.userRepository = userRepository;
         this.accountRepository = accountRepository;
     }
-
-    public int doTransaction(String username, Transaction transaction) {
+    public int doTransaction(String username, Transaction transaction, String type) {
         Account creditAccount = accountRepository.findByAccountId(transaction.getTransferAccountId());
         Account debitAccount = transaction.getAccount();
         Transaction debitTransaction = new Transaction();
@@ -37,23 +36,23 @@ public class TransactionService {
         if (debitAccount == null || creditAccount == null || debitAccount.getAccountId().equals(creditAccount.getAccountId())) {
             return 0;
         }
-        else if(accountRepository.findByUser(userRepository.findByUsername(username)).contains(creditAccount)) {
+        else if(type.isEmpty() && accountRepository.findByUser(userRepository.findByUsername(username)).contains(creditAccount)) {
             return -2;
         }
-        else if (debitAccount.getBalance()<transaction.getAmount()) {
+        else if (accountRepository.getBalance(debitAccount.getAccountId())<transaction.getAmount()) {
             return -1;
         }
         else if (transaction.getAmount()+getAmountSentToday(debitAccount)>dailyTransactionLimit) {
             return -3;
         }
-        creditTransaction.setType("credit");
+        creditTransaction.setType("credit"+type);
         creditTransaction.setAccount(creditAccount);
         creditTransaction.setTimeStamp(LocalDateTime.now());
         creditTransaction.setDescription(transaction.getDescription());
         creditTransaction.setAmount(transaction.getAmount());
         creditTransaction.setAccount(creditAccount);
         creditTransaction.setTransferAccountId(debitAccount.getAccountId());
-        debitTransaction.setType("debit");
+        debitTransaction.setType("debit"+type);
         debitTransaction.setAccount(debitAccount);
         debitTransaction.setTimeStamp(creditTransaction.getTimeStamp());
         debitTransaction.setDescription(transaction.getDescription());
@@ -61,53 +60,13 @@ public class TransactionService {
         debitTransaction.setAccount(debitAccount);
         debitTransaction.setTransferAccountId(creditAccount.getAccountId());
 
-        creditAccount.setBalance(creditAccount.getBalance()+transaction.getAmount());
-        debitAccount.setBalance(debitAccount.getBalance()-transaction.getAmount());
+        accountRepository.setBalance(creditAccount.getAccountId(), transaction.getAmount());
+        accountRepository.setBalance(debitAccount.getAccountId(), -transaction.getAmount());
 
         transactionRepository.save(debitTransaction);
         transactionRepository.save(creditTransaction);
         return 1;
     }
-
-    public int doFundTransaction(String username, Transaction transaction) {
-        Account creditFundAccount = accountRepository.findByAccountId(transaction.getTransferAccountId());
-        Account debitFundAccount = transaction.getAccount();
-        Transaction debitFundTransaction = new Transaction();
-        Transaction creditFundTransaction = new Transaction();
-        if (debitFundAccount == null || creditFundAccount == null) {
-            return -2;
-        }
-        else if (debitFundAccount.getAccountId().equals(creditFundAccount.getAccountId())) {
-            return 0;
-        }
-        else if (debitFundAccount.getBalance()<transaction.getAmount()) {
-            return -1;
-        }
-        creditFundTransaction.setType("credit-fund");
-        creditFundTransaction.setAccount(creditFundAccount);
-        creditFundTransaction.setTimeStamp(LocalDateTime.now());
-        creditFundTransaction.setDescription(transaction.getDescription());
-        creditFundTransaction.setAmount(transaction.getAmount());
-        creditFundTransaction.setTransferAccountId(debitFundAccount.getAccountId());
-        debitFundTransaction.setType("debit-fund");
-        debitFundTransaction.setAccount(debitFundAccount);
-        debitFundTransaction.setTimeStamp(creditFundTransaction.getTimeStamp());
-        debitFundTransaction.setDescription(transaction.getDescription());
-        debitFundTransaction.setAmount(transaction.getAmount());
-        debitFundTransaction.setTransferAccountId(creditFundAccount.getAccountId());
-
-        creditFundAccount.setBalance(creditFundAccount.getBalance()+transaction.getAmount());
-        debitFundAccount.setBalance(debitFundAccount.getBalance()-transaction.getAmount());
-
-        transactionRepository.save(debitFundTransaction);
-        transactionRepository.save(creditFundTransaction);
-        return 1;
-    }
-    @Scheduled(cron="0 0 0 * * *", zone = "GMT+5:00")
-    public void doScheduledTransaction() {
-        System.out.println("Hello");
-    }
-
     public Double getAmountSentToday(Account account) {
         List<Transaction> transactions = transactionRepository.findByAccountAndType(account, account.getType());
         Double totalAmountSpendToday = 0D;

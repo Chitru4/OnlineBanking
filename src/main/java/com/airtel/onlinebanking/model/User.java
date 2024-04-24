@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = {"id"})})
+@Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})})
 public class User {
     @Id
     @SequenceGenerator(
