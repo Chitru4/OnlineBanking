@@ -1,6 +1,7 @@
 package com.airtel.onlinebanking;
 
 import com.airtel.onlinebanking.model.Account;
+import com.airtel.onlinebanking.model.ScheduledTransaction;
 import com.airtel.onlinebanking.model.Transaction;
 import com.airtel.onlinebanking.model.User;
 
@@ -13,6 +14,7 @@ public class TestData {
     private Account account2;
     private Transaction transaction1;
     private Transaction transaction2;
+    private ScheduledTransaction scheduledTransaction;
 
     public TestData() {
         user = new User();
@@ -49,6 +51,13 @@ public class TestData {
         transaction2.setAmount(10000D);
         transaction2.setTimeStamp(transaction1.getTimeStamp());
         transaction2.setAccount(account2);
+        scheduledTransaction = new ScheduledTransaction();
+        scheduledTransaction.setDueDateTime(LocalDateTime.now());
+        scheduledTransaction.setAmount(1D);
+        scheduledTransaction.setCounter(5L);
+        scheduledTransaction.setFromAccountId(1000000000L);
+        scheduledTransaction.setToAccountId(1000000001L);
+        scheduledTransaction.setMinuteIncrement(1L);
     }
 
     public User getUser() {
@@ -89,5 +98,13 @@ public class TestData {
 
     public void setTransaction2(Transaction transaction2) {
         this.transaction2 = transaction2;
+    }
+
+    public ScheduledTransaction getScheduledTransaction() {
+        return scheduledTransaction;
+    }
+
+    public void setScheduledTransaction(ScheduledTransaction scheduledTransaction) {
+        this.scheduledTransaction = scheduledTransaction;
     }
 }

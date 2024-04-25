@@ -13,8 +13,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 
 @Service
 @Transactional
@@ -24,6 +26,7 @@ public class ScheduledTransactionService {
     private final AccountRepository accountRepository;
     private final TransactionRepository transactionRepository;
     private final TransactionService transactionService;
+    private PriorityQueue<ScheduledTransaction> scheduledTransactions = new PriorityQueue<>(Comparator.comparing(ScheduledTransaction::getDueDateTime));
     @Autowired
     public ScheduledTransactionService(ScheduledTransactionRepository scheduledTransactionRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, TransactionService transactionService, UserRepository userRepository) {
         this.scheduledTransactionRepository = scheduledTransactionRepository;
@@ -31,37 +34,48 @@ public class ScheduledTransactionService {
         this.transactionRepository = transactionRepository;
         this.transactionService = transactionService;
         this.userRepository = userRepository;
+        this.scheduledTransactions.addAll(scheduledTransactionRepository.findAll());
     }
 
     /**
      * Create a new table for scheduled transactions
      * Every minute check if transaction is due and complete it
      * Set new date as current+increment
+     * Set in memory priority queue to make it faster
      */
-    @Scheduled(cron="0 */1 * * * *", zone = "GMT+5:30")
+    @Scheduled(cron="0 */1 * * * *")
     public void doScheduledTransaction() {
-        List<ScheduledTransaction> scheduledTransactionList = scheduledTransactionRepository.findAll();
         LocalDateTime currentTime = LocalDateTime.now();
-        for (ScheduledTransaction scheduledTransaction:scheduledTransactionList) {
+        while (scheduledTransactions.peek() != null) {
+            ScheduledTransaction scheduledTransaction = scheduledTransactions.poll();
             if (scheduledTransaction.getDueDateTime().isBefore(currentTime)) {
                 Transaction transaction = new Transaction();
                 transaction.setAccount(accountRepository.findByAccountId(scheduledTransaction.getFromAccountId()));
                 transaction.setTransferAccountId(scheduledTransaction.getToAccountId());
                 transaction.setAmount(scheduledTransaction.getAmount());
                 transaction.setDescription("Auto-payed at:"+ LocalDateTime.now());
-                transactionService.doTransaction("Admin", transaction, "-auto");
+                if (transactionService.doTransaction("Admin", transaction, "-auto") != 1) {
+                    continue;
+                }
                 if (scheduledTransaction.getCounter() == 1) {
                     scheduledTransactionRepository.delete(scheduledTransaction);
                     continue;
                 }
                 scheduledTransaction.setDueDateTime(scheduledTransaction.getDueDateTime().plusMinutes(scheduledTransaction.getMinuteIncrement()));
                 scheduledTransaction.setCounter(scheduledTransaction.getCounter()-1);
+                scheduledTransactions.add(scheduledTransaction);
+                scheduledTransactionRepository.save(scheduledTransaction);
+            }
+            else {
+                scheduledTransactions.add(scheduledTransaction);
+                break;
             }
         }
     }
 
     public void saveScheduledTransaction(ScheduledTransaction scheduledTransaction) {
         scheduledTransaction.setDueDateTime(LocalDateTime.now());
+        scheduledTransactions.add(scheduledTransaction);
         scheduledTransactionRepository.save(scheduledTransaction);
     }
     public List<ScheduledTransaction> getAllUserScheduledTransactions(String username) {
