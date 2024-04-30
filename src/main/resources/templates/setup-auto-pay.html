@@ -1,40 +1,109 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Setup auto pay</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 400px;
+            text-align: center;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        h4 {
+            margin-top: 20px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        a:hover {
+            color: #0056b3;
+        }
+
+        b {
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
 </head>
 <body>
-<div>
+<div class="container">
     <form action="/setup-auto-pay" method="post" th:object="${scheduledTransaction}">
-        <b>Enter the details:</b> <br>
-        <br>Select your account number<br>
-        <select th:field="*{fromAccountId}" class="form-control" id="fromAccountId" name="toAccountId" required="required">
-            <option value="0">select option</option>
-            <option th:each="option : ${accountOptions}" th:value="${option.getAccountId()}" th:text="${option.getAccountId().toString()+option.getType().toString()}"></option>
-        </select>
-        <br>Account number<br>
+        <b>Enter the details:</b> <br><br>
+        Select your account number<br>
+        <select th:field="*{fromAccountId}" id="fromAccountId" name="toAccountId" required="required">
+            <option value="0">Select option</option>
+            <option th:each="option : ${accountOptions}" th:value="${option.getAccountId()}" th:text="${option.getAccountId().toString() + ' (' + option.getType().toString() + ')'}"></option>
+        </select><br>
+        Account number<br>
         <input type="text"
                th:field="*{toAccountId}"
-               name="account number"/>
-        <br>Amount<br>
+               name="account number"/><br>
+        Amount<br>
         <input type="number" step="any"
                th:field="*{amount}"
-               name="amount"/>
-        <br>Enter delay in minutes<br>
+               name="amount"/><br>
+        Enter delay in minutes<br>
         <input type="number"
                th:field="*{minuteIncrement}"
-               name="minute-increment"
-               value="minute-increment"/>
-        <br>Enter number of times you want transaction to take place<br>
+               name="minute-increment"/><br>
+        Enter number of times you want transaction to take place<br>
         <input type="number"
                th:field="*{counter}"
-               name="counter"
-               value="counter"/>
-        <br>
+               name="counter"/><br>
         <input type="submit"/>
     </form>
+    <h4><a th:href="@{/}">Click here to go back</a></h4>
+    <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
 </div>
-<h4><a th:href="@{/}">Click here to go back</a></h4>
-<div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
 </body>
 </html>

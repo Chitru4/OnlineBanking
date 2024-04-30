@@ -1,65 +1,143 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage User</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 400px;
+            text-align: center;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="email"],
+        input[type="tel"] {
+            width: calc(100% - 24px);
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            background-color: #007bff;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        b {
+            font-size: 18px;
+            color: #333;
+        }
+
+        h4 {
+            margin-top: 20px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007bff;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-<div>
+<div class="container">
     <form action="/manage-user" method="post" th:object="${user}">
-        <b>Enter your details to be changed or leave them as it is:</b> <br>
-        <br>First Name <br>
+        <h1>Manage User</h1>
+        <b>Enter your details to be changed or leave them as they are:</b><br><br>
+        First Name<br>
         <input type="text"
                th:field="*{firstName}"
                name="first name"
-               th:text="*{firstName}"/>
-        <b>(old)</b>
-        <br>Last Name<br>
+               th:value="*{firstName}"/>
+        <br>
+        Last Name<br>
         <input type="text"
                th:field="*{lastName}"
                name="last name"
-               th:text="*{lastName}"/>
-        <b>(old)</b>
-        <br>Mobile<br>
+               th:value="*{lastName}"/>
+        <br>
+        Mobile<br>
         <input type="tel"
                pattern="^[0-9]{6,12}$"
                th:field="*{mobile}"
                name="mobile"
-               th:text="*{mobile}"/>
-        <b>(old)</b>
-        <br>Address<br>
+               th:value="*{mobile}"/>
+        <br>
+        Address<br>
         <input type="text"
                th:field="*{address}"
                name="address"
-               th:text="*{address}"/>
-        <b>(old)</b>
-        <br>Email<br>
+               th:value="*{address}"/>
+        <br>
+        Email<br>
         <input type="email"
                th:field="*{email}"
                name="email"
                th:value="*{email}"
                disabled/>
-        <br>Date of Birth<br>
+        <br>
+        Date of Birth<br>
         <input type="text"
                th:field="*{dob}"
                name="dob"
                th:value="*{dob}"
                disabled/>
-        <br>username<br>
+        <br>
+        Username<br>
         <input type="text"
                th:field="*{username}"
                name="username"
                th:value="*{username}"
                disabled/>
-        <br>Enter password to change details<br>
+        <br>
+        Enter password to change details<br>
         <input type="password"
                th:field="*{password}"
                name="password"
                required="required"/>
         <br>
-        <input type="submit"/>
+        <input type="submit" value="Submit"/>
     </form>
+    <h4><a th:href="@{/}">Click here to go back</a></h4>
+    <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
 </div>
-<h4><a th:href="@{/}">Click here to go back</a></h4>
-<div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
 </body>
 </html>

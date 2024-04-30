@@ -1,40 +1,116 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Create account</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 400px;
+            text-align: center;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: calc(100% - 24px);
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            background-color: #007bff;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .alert {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        b {
+            font-size: 18px;
+            color: #333;
+        }
+
+        h4 {
+            margin-top: 20px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007bff;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-<div>
+<div class="container">
     <form action="/create-account" method="post" th:object="${account}">
-        <b>Create new account:</b> <br>
-        <br>Account type<br>
-        <label>
-            <input type="text"
-                   th:field="*{type}"
-                   name="type"
-                   required/>
-        </label>
-        <br>Amount<br>
-        <label>
-            <input type="number" step="any"
-                   th:field="*{balance}"
-                   name="amount"/>
-        </label>
-        <br>Add a suitable pin for your account<br>
-        <label>
-            <input type="number" step="any"
-                   minlength="4"
-                   maxlength="4"
-                   th:field="*{pin}"
-                   name="pin"/>
-        </label>
+        <h1>Create New Account</h1>
+        <b>Enter the details:</b><br><br>
+        Account Type<br>
+        <input type="text" th:field="*{type}" name="type" required/>
         <br>
-        <input type="submit"/>
+        Amount<br>
+        <input type="number" step="any" th:field="*{balance}" name="amount"/>
         <br>
-        <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
-        <div class="alert alert-success" role="alert" th:text="${success}" th:if="${success}"></div>
+        Add a Suitable PIN for Your Account<br>
+        <input type="number" minlength="4" maxlength="4" th:field="*{pin}" name="pin"/>
+        <br>
+        <input type="submit" value="Create Account"/>
+        <br>
+        <div class="alert alert-danger" th:text="${error}" th:if="${error}"></div>
+        <div class="alert alert-success" th:text="${success}" th:if="${success}"></div>
     </form>
+    <h4><a th:href="@{/}">Click here to go back</a></h4>
 </div>
-<h4><a th:href="@{/}">Click here to go back</a></h4>
 </body>
 </html>

@@ -1,38 +1,103 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Transactions</title>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Past Transactions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 80%;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f2f2f2;
+        }
+
+        h4 {
+            margin-top: 20px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007bff;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-<p>
-    <h1><b>Past Transactions:</b></h1>
-</p>
-<p>
-    <b>List of User Transactions:</b>
-</p>
-
-<div th:if="${ not#lists.isEmpty(transactions)}">
-    <table border="1">
-        <tr>
-            <th>Transaction Id</th>
-            <th>Account Id</th>
-            <th>Transfer account id</th>
-            <th>Date and Time of Transaction</th>
-            <th>Transaction Type</th>
-            <th>Transaction amount</th>
-        </tr>
-        <tr th:each="transaction : ${transactions}">
-            <td th:text="${transaction.transactionId}"></td>
-            <td th:text="${transaction.account.accountId}"></td>
-            <td th:text="${transaction.transferAccountId}"></td>
-            <td th:text="${transaction.timeStamp}"></td>
-            <td th:text="${transaction.type}"></td>
-            <td th:text="${transaction.amount}"></td>
-        </tr>
-    </table>
+<div class="container">
+    <h1>Past Transactions</h1>
+    <div th:if="${not #lists.isEmpty(transactions)}">
+        <table>
+            <thead>
+            <tr>
+                <th>Transaction Id</th>
+                <th>Account Id</th>
+                <th>Transfer Account Id</th>
+                <th>Date and Time</th>
+                <th>Transaction Type</th>
+                <th>Transaction Amount</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="transaction : ${transactions}">
+                <td th:text="${transaction.transactionId}"></td>
+                <td th:text="${transaction.account.accountId}"></td>
+                <td th:text="${transaction.transferAccountId}"></td>
+                <td th:text="${transaction.timeStamp}"></td>
+                <td th:text="${transaction.type}"></td>
+                <td th:text="${transaction.amount}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <h4><a th:href="@{/}">Click here to go back</a></h4>
 </div>
-<h4><a th:href="@{/}">Click here to go back</a></h4>
 </body>
 </html>

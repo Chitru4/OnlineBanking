@@ -26,7 +26,7 @@ public class ScheduledTransactionService {
     private final AccountRepository accountRepository;
     private final TransactionRepository transactionRepository;
     private final TransactionService transactionService;
-    private PriorityQueue<ScheduledTransaction> scheduledTransactions = new PriorityQueue<>(Comparator.comparing(ScheduledTransaction::getDueDateTime));
+    private final PriorityQueue<ScheduledTransaction> scheduledTransactions = new PriorityQueue<>(Comparator.comparing(ScheduledTransaction::getDueDateTime));
     @Autowired
     public ScheduledTransactionService(ScheduledTransactionRepository scheduledTransactionRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, TransactionService transactionService, UserRepository userRepository) {
         this.scheduledTransactionRepository = scheduledTransactionRepository;

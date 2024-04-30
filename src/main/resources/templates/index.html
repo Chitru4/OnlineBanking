@@ -1,25 +1,74 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Online Banking</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      width: 400px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+      color: #333;
+    }
+
+    h3 {
+      margin: 10px 0;
+      color: #444;
+    }
+
+    a {
+      text-decoration: none;
+      color: #007bff;
+      transition: color 0.3s ease;
+    }
+
+    a:hover {
+      color: #0056b3;
+    }
+
+    .logged-in-links {
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
-<h1>Welcome to Online banking</h1>
-<div sec:authorize="isAnonymous()">
-  <h3><a th:href="@{/register}">Register</a></h3>
-  <h3><a th:href="@{/login}">Login</a></h3>
-</div>
-<div sec:authorize="isFullyAuthenticated()">
-  <h3>Welcome <span sec:authentication="name"></span></h3>
-  <h3><a th:href="@{/manage-user}">Manage user details</a></h3>
-  <h3><a th:href="@{/create-account}">Create Account</a></h3>
-  <h3><a th:href="@{/accounts}">View Accounts</a></h3>
-  <h3><a th:href="@{/past-transactions}">View past transactions</a></h3>
-  <h3><a th:href="@{/transaction}">Send/ Receive Money</a></h3>
-  <h3><a th:href="@{/fund-transfer}">Fund transfer</a></h3>
-  <h3><a th:href="@{/setup-auto-pay}">Setup auto-pay</a></h3>
-  <h3><a th:href="@{/manage-auto-pay}">Manage auto-pay</a></h3>
-  <h3><a th:href="@{/logout}">Logout</a></h3>
+<div class="container">
+  <h1>Welcome to Online Banking</h1>
+  <div sec:authorize="isAnonymous()">
+    <h3><a th:href="@{/register}">Register</a></h3>
+    <h3><a th:href="@{/login}">Login</a></h3>
+  </div>
+  <div class="logged-in-links" sec:authorize="isFullyAuthenticated()">
+    <h3>Welcome <span sec:authentication="name"></span></h3>
+    <h3><a th:href="@{/manage-user}">Manage user details</a></h3>
+    <h3><a th:href="@{/create-account}">Create Account</a></h3>
+    <h3><a th:href="@{/accounts}">View Accounts</a></h3>
+    <h3><a th:href="@{/past-transactions}">View past transactions</a></h3>
+    <h3><a th:href="@{/transaction}">Send/ Receive Money</a></h3>
+    <h3><a th:href="@{/fund-transfer}">Fund transfer</a></h3>
+    <h3><a th:href="@{/setup-auto-pay}">Setup auto-pay</a></h3>
+    <h3><a th:href="@{/manage-auto-pay}">Manage auto-pay</a></h3>
+    <h3><a th:href="@{/logout}">Logout</a></h3>
+  </div>
 </div>
 </body>
 </html>
