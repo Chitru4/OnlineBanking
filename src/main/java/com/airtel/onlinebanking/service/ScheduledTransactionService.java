@@ -54,7 +54,7 @@ public class ScheduledTransactionService {
                 transaction.setTransferAccountId(scheduledTransaction.getToAccountId());
                 transaction.setAmount(scheduledTransaction.getAmount());
                 transaction.setDescription("Auto-payed at:"+ LocalDateTime.now());
-                if (transactionService.doTransaction("Admin", transaction, "-auto") != 1) {
+                if (transactionService.doTransaction(transaction.getAccount().getUser().getUsername(), transaction, "auto") != 1) {
                     continue;
                 }
                 if (scheduledTransaction.getCounter() == 1) {

@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -31,8 +32,8 @@ public class TransactionService {
     public int doTransaction(String username, Transaction transaction, String type) {
         Account creditAccount = accountRepository.findByAccountId(transaction.getTransferAccountId());
         Account debitAccount = transaction.getAccount();
-        Transaction debitTransaction = new Transaction();
         Transaction creditTransaction = new Transaction();
+        Transaction debitTransaction = new Transaction();
         if (debitAccount == null || creditAccount == null || debitAccount.getAccountId().equals(creditAccount.getAccountId())) {
             return 0;
         }
@@ -45,26 +46,14 @@ public class TransactionService {
         else if (transaction.getAmount()+getAmountSentToday(debitAccount)>dailyTransactionLimit) {
             return -3;
         }
-        creditTransaction.setType("credit"+type);
-        creditTransaction.setAccount(creditAccount);
-        creditTransaction.setTimeStamp(LocalDateTime.now());
-        creditTransaction.setDescription(transaction.getDescription());
-        creditTransaction.setAmount(transaction.getAmount());
-        creditTransaction.setAccount(creditAccount);
-        creditTransaction.setTransferAccountId(debitAccount.getAccountId());
-        debitTransaction.setType("debit"+type);
-        debitTransaction.setAccount(debitAccount);
-        debitTransaction.setTimeStamp(creditTransaction.getTimeStamp());
-        debitTransaction.setDescription(transaction.getDescription());
-        debitTransaction.setAmount(transaction.getAmount());
-        debitTransaction.setAccount(debitAccount);
-        debitTransaction.setTransferAccountId(creditAccount.getAccountId());
+
+        transaction.setType(type);
+        transaction.setTimeStamp(LocalDateTime.now());
 
         accountRepository.setBalance(creditAccount.getAccountId(), transaction.getAmount());
         accountRepository.setBalance(debitAccount.getAccountId(), -transaction.getAmount());
 
-        transactionRepository.save(debitTransaction);
-        transactionRepository.save(creditTransaction);
+        transactionRepository.save(transaction);
         return 1;
     }
     public Double getAmountSentToday(Account account) {
@@ -81,6 +70,14 @@ public class TransactionService {
     }
 
     public List<Transaction> getTransactions(String username) {
-        return transactionRepository.findByAccountIn(accountRepository.findByUser(userRepository.findByUsername(username)));
+        return transactionRepository.findByAccountInOrderByTransactionId(accountRepository.findByUser(userRepository.findByUsername(username)));
+    }
+    public List<Transaction> getTransactionsByTransferAccountId(String username) {
+        List<Account> userAccounts = accountRepository.findByUser(userRepository.findByUsername(username));
+        List<Long> transferAccountIds = new ArrayList<>();
+        for (Account account : userAccounts) {
+            transferAccountIds.add(account.getAccountId());
+        }
+        return transactionRepository.findByTransferAccountIdIn(transferAccountIds);
     }
 }

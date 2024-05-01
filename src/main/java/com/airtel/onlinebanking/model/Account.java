@@ -24,10 +24,10 @@ public class Account {
     private Long accountId;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name="user_id")
+    @ManyToOne
+    @JoinColumn(name="user_username")
     private User user;
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
     private List<Transaction> transactions;
     private String type;
     private Double balance;

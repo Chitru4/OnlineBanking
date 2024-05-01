@@ -30,12 +30,10 @@ public class TestData {
         account1 = new Account();
         account1.setCreatedDate(LocalDateTime.now());
         account1.setType("saving");
-        account1.setUser(user);
         account1.setBalance(10000000D);
         account2 = new Account();
         account2.setCreatedDate(LocalDateTime.now());
         account2.setType("business");
-        account2.setUser(user);
         account2.setBalance(1000000D);
         transaction1 = new Transaction();
         transaction1.setDescription("THIS IS FOR TESTING");
@@ -43,14 +41,12 @@ public class TestData {
         transaction1.setType("debit");
         transaction1.setAmount(10000D);
         transaction1.setTimeStamp(LocalDateTime.now());
-        transaction1.setAccount(account1);
         transaction2 = new Transaction();
         transaction2.setDescription("THIS IS FOR TESTING");
         transaction2.setTransferAccountId(1000000000L);
         transaction2.setType("credit");
         transaction2.setAmount(10000D);
         transaction2.setTimeStamp(transaction1.getTimeStamp());
-        transaction2.setAccount(account2);
         scheduledTransaction = new ScheduledTransaction();
         scheduledTransaction.setDueDateTime(LocalDateTime.now());
         scheduledTransaction.setAmount(1D);

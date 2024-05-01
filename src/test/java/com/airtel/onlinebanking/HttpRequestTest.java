@@ -20,6 +20,6 @@ class HttpRequestTest {
     @Test
     void greetingShouldReturnDefaultMessage() {
         assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/",
-                String.class)).contains("Welcome to Online banking");
+                String.class)).contains("Welcome to Online Banking");
     }
 }

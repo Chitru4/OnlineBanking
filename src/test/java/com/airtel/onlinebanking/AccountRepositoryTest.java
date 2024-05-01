@@ -11,8 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,11 +29,13 @@ public class AccountRepositoryTest {
     public void setAccountAndUser() {
         TestData testData = new TestData();
         user = testData.getUser();
-        userRepository.save(user);
+        userRepository.saveAndFlush(user);
         account1 = testData.getAccount1();
-        accountRepository.save(account1);
+        account1.setUser(user);
+        accountRepository.saveAndFlush(account1);
         account2 = testData.getAccount2();
-        accountRepository.save(account2);
+        account2.setUser(user);
+        accountRepository.saveAndFlush(account2);
     }
     @AfterEach
     public void deleteAccountAndUser() {

@@ -26,7 +26,7 @@ public class Transaction {
     private String description;
     private Long transferAccountId;
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "account_account_id")
     private Account account;
     public Transaction() {

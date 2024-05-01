@@ -11,5 +11,6 @@ import java.util.List;
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
     List<Transaction> findByAccountAndType(Account account, String type);
     List<Transaction> findByAccount(Account account);
-    List<Transaction> findByAccountIn(List<Account> account);
+    List<Transaction> findByAccountInOrderByTransactionId(List<Account> account);
+    List<Transaction> findByTransferAccountIdIn(List<Long> transferAccountIds);
 }

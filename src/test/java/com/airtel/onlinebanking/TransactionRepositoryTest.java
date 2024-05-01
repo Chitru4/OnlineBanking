@@ -34,13 +34,16 @@ public class TransactionRepositoryTest {
     public void setUpUserAccountTransaction() {
         TestData testData = new TestData();
         user = testData.getUser();
-        userRepository.save(user);
+        userRepository.saveAndFlush(user);
         account = testData.getAccount1();
-        accountRepository.save(account);
+        account.setUser(user);
+        accountRepository.saveAndFlush(account);
         transaction1 = testData.getTransaction1();
-        transactionRepository.save(transaction1);
+        transaction1.setAccount(account);
+        transactionRepository.saveAndFlush(transaction1);
         transaction2 = testData.getTransaction2();
-        transactionRepository.save(transaction2);
+        transaction2.setAccount(account);
+        transactionRepository.saveAndFlush(transaction2);
     }
     @AfterEach
     public void deleteUserAccountTransaction() {

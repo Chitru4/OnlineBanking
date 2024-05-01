@@ -73,7 +73,8 @@
 <body>
 <div class="container">
     <h1>Past Transactions</h1>
-    <div th:if="${not #lists.isEmpty(transactions)}">
+    <h2>Debit Transactions</h2>
+    <div th:if="${not #lists.isEmpty(debitTransactions)}">
         <table>
             <thead>
             <tr>
@@ -86,10 +87,35 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="transaction : ${transactions}">
+            <tr th:each="transaction : ${debitTransactions}">
                 <td th:text="${transaction.transactionId}"></td>
                 <td th:text="${transaction.account.accountId}"></td>
                 <td th:text="${transaction.transferAccountId}"></td>
+                <td th:text="${transaction.timeStamp}"></td>
+                <td th:text="${transaction.type}"></td>
+                <td th:text="${transaction.amount}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <h2>Credit Transactions</h2>
+    <div th:if="${not #lists.isEmpty(creditTransactions)}">
+        <table>
+            <thead>
+            <tr>
+                <th>Transaction Id</th>
+                <th>Account Id</th>
+                <th>Sender Account Id</th>
+                <th>Date and Time</th>
+                <th>Transaction Type</th>
+                <th>Transaction Amount</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="transaction : ${creditTransactions}">
+                <td th:text="${transaction.transactionId}"></td>
+                <td th:text="${transaction.transferAccountId}"></td>
+                <td th:text="${transaction.account.accountId}"></td>
                 <td th:text="${transaction.timeStamp}"></td>
                 <td th:text="${transaction.type}"></td>
                 <td th:text="${transaction.amount}"></td>

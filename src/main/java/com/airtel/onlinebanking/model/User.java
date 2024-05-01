@@ -10,17 +10,6 @@ import java.util.List;
 @Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})})
 public class User {
     @Id
-    @SequenceGenerator(
-            name = "user_sequence",
-            sequenceName = "user_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "user_sequence"
-    )
-    @Column(name="id")
-    private Long id;
     private String username;
     @NonNull
     private String password;
@@ -32,12 +21,12 @@ public class User {
     private String panNumber;
     private String email;
     private LocalDate dob;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Account> accounts;
     public User() {
     }
 
-    public User(String username, @NonNull String password, String firstName, String lastName, Long mobile, String address, @NonNull String panNumber, String email, LocalDate dob) {
+    public User(@NonNull String username, @NonNull String password, String firstName, String lastName, Long mobile, String address, @NonNull String panNumber, String email, LocalDate dob) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
@@ -55,14 +44,6 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getPassword() {

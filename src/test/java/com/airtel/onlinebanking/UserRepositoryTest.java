@@ -42,7 +42,7 @@ public class UserRepositoryTest {
         User savedUser = userRepository.findByUsername(user.getUsername());
 
         assertThat(savedUser).isNotNull();
-        assertThat(savedUser).isEqualTo(user);
+        assertThat(savedUser.getUsername()).isEqualTo(user.getUsername());
     }
     @Test
     @DisplayName("JUnit test for deleting user by username")

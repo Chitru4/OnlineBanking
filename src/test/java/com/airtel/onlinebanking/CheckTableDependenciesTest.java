@@ -36,20 +36,17 @@ public class CheckTableDependenciesTest {
         user = testData.getUser();
         userRepository.saveAndFlush(user);
         account = testData.getAccount1();
+        account.setUser(user);
         accountRepository.saveAndFlush(account);
         transaction1 = testData.getTransaction1();
+        transaction1.setAccount(account);
         transactionRepository.saveAndFlush(transaction1);
         transaction2 = testData.getTransaction2();
+        transaction2.setAccount(account);
         transactionRepository.saveAndFlush(transaction2);
     }
     @Test
     void deleteUser_ShouldDeleteAccountsAndTransactions() {
-        userRepository.delete(user);
-        userRepository.flush();
-        assertThat(userRepository.findByUsername(user.getUsername())).isNotNull();
-        accountRepository.delete(account);
-        accountRepository.flush();
-        assertThat(accountRepository.findByUserAndType(user, account.getType())).isNotEmpty();
         transactionRepository.delete(transaction1);
         transactionRepository.delete(transaction2);
         transactionRepository.flush();

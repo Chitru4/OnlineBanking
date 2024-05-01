@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 public class AppController {
@@ -69,7 +70,8 @@ public class AppController {
     }
     @RequestMapping(value = "/past-transactions")
     public String viewPastTransactions(Principal principal, Model model) {
-        model.addAttribute("transactions", transactionService.getTransactions(principal.getName()));
+        model.addAttribute("debitTransactions", transactionService.getTransactions(principal.getName()));
+        model.addAttribute("creditTransactions", transactionService.getTransactionsByTransferAccountId(principal.getName()));
         return "past-transactions";
     }
     @RequestMapping(value="/fund-transfer")
@@ -125,7 +127,7 @@ public class AppController {
             redirectAttributes.addFlashAttribute("error", "Incorrect pin");
             return "redirect:/transaction";
         }
-        switch (transactionService.doTransaction(principal.getName(), transaction, "")) {
+        switch (transactionService.doTransaction(principal.getName(), transaction, "bank")) {
             case 1 -> { return "transaction-success"; }
             case -1 -> {
                 redirectAttributes.addFlashAttribute("error", "Low account balance");
@@ -150,7 +152,7 @@ public class AppController {
     @PostMapping(value = "/fund-transfer")
     public String doFundTransaction(Principal principal, Transaction transaction, Long accountId, RedirectAttributes redirectAttributes) {
         transaction.setAccount(accountService.getByAccountId(accountId));
-        switch (transactionService.doTransaction(principal.getName(), transaction, "-fund")) {
+        switch (transactionService.doTransaction(principal.getName(), transaction, "fund")) {
             case 1 -> { return "transaction-success"; }
             case -1 -> {
                 redirectAttributes.addFlashAttribute("error", "Low account balance");

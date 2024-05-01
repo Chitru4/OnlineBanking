@@ -32,12 +32,15 @@ public class TransactionServiceTests {
     public void setupUserData() {
         TestData testData = new TestData();
         user = testData.getUser();
-        userRepository.save(user);
+        userRepository.saveAndFlush(user);
         account1 = testData.getAccount1();
-        accountRepository.save(account1);
+        account1.setUser(user);
+        accountRepository.saveAndFlush(account1);
         account2 = testData.getAccount2();
-        accountRepository.save(account2);
+        account2.setUser(user);
+        accountRepository.saveAndFlush(account2);
         transaction = testData.getTransaction1();
+        transaction.setAccount(account1);
     }
     @Test
     void doTransaction_ShouldCompleteSuccessfully() {
