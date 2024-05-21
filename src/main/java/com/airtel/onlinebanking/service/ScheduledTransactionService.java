@@ -75,6 +75,12 @@ public class ScheduledTransactionService {
 
     public void saveScheduledTransaction(ScheduledTransaction scheduledTransaction) {
         scheduledTransaction.setDueDateTime(LocalDateTime.now());
+        if (accountRepository.findByAccountId(scheduledTransaction.getToAccountId()) == null) {
+            return;
+        }
+        if (accountRepository.findByAccountId(scheduledTransaction.getFromAccountId()).getBalance() < scheduledTransaction.getAmount()) {
+            return;
+        }
         scheduledTransactions.add(scheduledTransaction);
         scheduledTransactionRepository.save(scheduledTransaction);
     }
