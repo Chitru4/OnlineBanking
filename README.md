@@ -1,6 +1,6 @@
 # Online Banking Application
 
-![Project Banner](![image](https://github.com/Chitru4/OnlineBanking/assets/100341402/9792aec5-3246-4200-940d-ec69daee1512))
+(![image](https://github.com/Chitru4/OnlineBanking/assets/100341402/9792aec5-3246-4200-940d-ec69daee1512)
 
 ## Introduction
 
@@ -50,14 +50,14 @@ Welcome to the Online Banking Application! This project aims to provide users wi
 
 ## Block Diagram
 
-![Block Diagram](![banking_app_diagram](https://github.com/Chitru4/OnlineBanking/assets/100341402/0b0c8aad-29b3-4933-b7b6-67dad2c6a6c2))
+(![banking_app_diagram](https://github.com/Chitru4/OnlineBanking/assets/100341402/0b0c8aad-29b3-4933-b7b6-67dad2c6a6c2)
 
 ## Setup and Installation
 
 1. **Clone the repository**
    ```bash
    git clone https://github.com/Chitru4/OnlineBanking.git
-   cd online-banking-app
+   cd onlinebanking
    ```
 
 2. **Configure the database**
