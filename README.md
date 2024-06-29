@@ -1,7 +1,8 @@
 ```markdown
 # Online Banking Application
 
-![Project Banner](path_to_your_banner_image)
+![Project Banner](![image](https://github.com/Chitru4/OnlineBanking/assets/100341402/9792aec5-3246-4200-940d-ec69daee1512)
+)
 
 ## Introduction
 
@@ -51,7 +52,8 @@ Welcome to the Online Banking Application! This project aims to provide users wi
 
 ## Block Diagram
 
-![Block Diagram](path_to_your_block_diagram_image)
+![Block Diagram](![banking_app_diagram](https://github.com/Chitru4/OnlineBanking/assets/100341402/0b0c8aad-29b3-4933-b7b6-67dad2c6a6c2)
+)
 
 ## Setup and Installation
 
@@ -115,6 +117,7 @@ For any questions or inquiries, please contact [chitraksh24@gmail.com](mailto:ch
 
 ---
 
-![Footer Image](path_to_your_footer_image)
-```
+![Footer Image](![image](https://github.com/Chitru4/OnlineBanking/assets/100341402/f063508b-4aac-46ca-ac0c-47e339ea5d8c)
+)
+
 
